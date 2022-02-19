@@ -5,6 +5,9 @@ var router = express.Router();
 router.get('/homepage', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+router.get('/', function(req, res, next) {
+  res.send('respond with a resource');
+});
 
 const PORT = process.env.PORT || 3001;
 const app = express();
