@@ -4,9 +4,9 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import mysql from 'mysql';
 import session from 'express-session';
-import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
-import loginRouter from './nodelogin/login.js';
+import indexRouter from './server/routes/index.js';
+import usersRouter from './server/routes/users.js';
+import loginRouter from './server/nodelogin/login.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
