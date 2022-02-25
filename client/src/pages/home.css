@@ -1,0 +1,12 @@
+.list-group {
+  padding-top: 20%;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-bottom: 50%;
+
+  border-radius: 20px;
+}
+
+.list-group-item {
+  border: 1.5px solid black;
+}

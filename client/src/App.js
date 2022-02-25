@@ -42,7 +42,9 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
       <Splash />
+      <Home />
       {/* <Nav /> */}
       {/* <div>
             <header>
