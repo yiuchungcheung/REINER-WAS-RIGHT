@@ -1,12 +1,26 @@
 .list-group {
   padding-top: 20%;
-  padding-left: 10%;
-  padding-right: 10%;
+  padding-left: 15%;
+  padding-right: 15%;
   padding-bottom: 50%;
 
   border-radius: 20px;
 }
 
+.brand {
+  margin-top: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
 .list-group-item {
   border: 1.5px solid black;
+}
+
+.table-title {
+  background-color: #91d2c4;
 }
