@@ -1,15 +1,14 @@
 import React from 'react';
+import "./splash.css";
 
-
-const Signup = () => {
+const splash = () => {
     return (
         <div>
-            <div class="brand">
+            <header>
             <h1>moment</h1>
             <p>prompt with your team!</p>
-            </div>
+            </header>
         </div>
     );
 }
-export default Signup;
-
+export default splash;
