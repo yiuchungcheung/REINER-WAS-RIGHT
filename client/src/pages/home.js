@@ -5,38 +5,30 @@ import "./home.css";
 const Home = () => {
 
     // want to redirect them to /prompt?group1, /prompt?group2 etc. but need to get name of the group
-    function redirectGroupPrompt(props) {
-        // console.log(document.getElementById("test"));
-        // console.log(props);
-        // window.location.assign("/" + props.route);
-        window.location.assign("/prompt");
+    function redirectGroup(route) {
+        window.location.assign(route);
     }
 
-    function redirectToCreate(props) {
-        // console.log(document.getElementById("test"));
-        // console.log(props);
-        // window.location.assign("/" + props.route);
-        window.location.assign("/create");
-    }
-
-    // when groups are created, add ID tag to each created group
 
 
     return (
         <div>
             <div class="brand">
-            <h1>moment</h1>
-            <p>prompt with your team!</p>
+                <h1>moment</h1>
+                <p>prompt with your team!</p>
             </div>
 
             <ul class="list-group container-fluid">
-                <li class="list-group-item table-title">Groups for You</li>
-                <li class="list-group-item" onClick={redirectToCreate}>+ create a group</li>
-                <li class="list-group-item" id="test" route="/prompt" onClick={redirectGroupPrompt}>Informatics Capstone</li>
+                <li class="list-group-item table-title" >Groups for You</li>
+                <li class="list-group-item" onClick={() => {redirectGroup("/create");}}>+ create a group</li>
+
+                {/* when groups are created, add ID tag to each created group */}
+                {/* adding ? after /prompt to direct to dediated group prompt interface using the group's ID*/}
+                <li class="list-group-item" id="informatics-capstone" onClick={(e) => {redirectGroup("/prompt?" + e.currentTarget.id);}}>Informatics Capstone</li>
                 <li class="list-group-item">Group 2</li>
                 <li class="list-group-item">Group 3</li>
             </ul>
-         </div>
+        </div>
     );
 }
 export default Home;
