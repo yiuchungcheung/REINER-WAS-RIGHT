@@ -1,0 +1,22 @@
+.list-group {
+    padding-top: 20%;
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-bottom: 1%;
+    border-radius: 20px;
+  }
+  h1 {
+    color:#343434;
+  }
+  
+  p {
+    color: #8D8D8D;
+  }
+  .list-group-item {
+    border: 1.5px solid #8D8D8D;
+  }
+  
+  .reply {
+    color: #45BAA1;
+    border: 1.5px solid #45BAA1;
+  }

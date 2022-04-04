@@ -6,6 +6,7 @@ import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Prompt from "./pages/prompt";
 import Profile from "./pages/profile";
+import HistoryPrompt from "./pages/history";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 
@@ -21,7 +22,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home />} />
             <Route path="/create" element={<Create />} />
-            <Route path="/prompt" element={<Prompt/>}/>
+            <Route path="/prompt" element={<Prompt />} />
+            <Route path="/history" element={<HistoryPrompt />} />
           </Routes>
         </div>
       </div>
