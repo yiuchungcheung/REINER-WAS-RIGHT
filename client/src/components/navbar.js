@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 
 const Nav = () => {
     return (
-        
+
         <div>
                 <nav class="navbar navbar-expand-lg navbar-light">
                 <Container>
@@ -17,7 +17,7 @@ const Nav = () => {
                         <ul class="navbar-nav">
                         <div id="nav-buttons">
                             <button class="solid btn btn-primary btn-md">Create group</button>
-                            <button class="solid btn btn-primary btn-md green">Join Group</button>
+                            <button class="solid btn btn-secondary btn-md green">Join Group</button>
                         </div>
                         </ul>
                     </div>
