@@ -1,15 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import app from '/client/src/firebase.js';
+import { getDatabase } from 'firebase/database';
 
-// function that submits the user response along with the generated room code 
-function createGroup() {
-    var ref = firebase.database().ref("groups");
-    ref.push({
-        name:"Dawg Pack"
+const database = getDatabase();
 
-    })
-}
 
 
 
@@ -34,7 +28,7 @@ const Create = () => {
                             </div>
                         </div>
                     </li>
-                    <li class="list-group-item reply" onClick={createGroup}>Create Group</li>
+                    <li class="list-group-item reply">Create Group</li>
                 </ul>
                 
             </div>
@@ -46,7 +40,7 @@ const Create = () => {
                                 <Form.Label>Group Name</Form.Label>
                                 <Form.Control type="text" placeholder="Group Name"  required />
                             </Form.Group>
-                            <Button className="w-100 mt-4 outline" type="submit" onClick={createGroup}>Create</Button>
+                            <Button className="w-100 mt-4 outline" type="submit">Create</Button>
                         </Form>
                     </Card.Body>
                 </Card>
