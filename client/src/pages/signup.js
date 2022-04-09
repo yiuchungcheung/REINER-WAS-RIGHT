@@ -13,7 +13,12 @@ const Signup = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    //
+    const db = getDatabase;
+    const usersRef = ref(db, "users");
+    usersRef.push({username: + userName, fname: + fname, lname: + lname, email: + emailRef, dob: + dob});
 
+    //
     async function handleSubmit(e) {
         e.preventDefault();
 

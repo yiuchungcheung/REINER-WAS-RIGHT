@@ -20,6 +20,7 @@ body {
 
 #navbar {
   background-color: #F7F3E5;
+
 }
 
 header {
@@ -34,7 +35,8 @@ header {
 }
 
 #nav-buttons > button {
-  margin: 20px;
+  margin: 30px;
+
 }
 
 .App-link {
