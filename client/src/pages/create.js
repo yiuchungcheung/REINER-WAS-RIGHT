@@ -1,11 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import { getDatabase } from 'firebase/database';
-
-const database = getDatabase();
-
-
-
 
 const link = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);;
 
