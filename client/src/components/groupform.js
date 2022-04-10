@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import firebase from '../firebase';
 
-export default function form() {
-    const [groupname, setGroupName] = useState('');
+export default function GroupForm() {
+    const [groups, setGroupName] = useState('');
 
     const handleOnChange = (e) => {
         setGroupName(e.target.value);
@@ -10,8 +10,7 @@ export default function form() {
     const createGroup = () => {
       const groupRef = firebase.database().ref('groups');
       const group = {
-        groupname,
-        members,
+        groups,
       };
       groupRef.push(group)
     }
@@ -19,7 +18,7 @@ export default function form() {
   return (
     <div>
         <input type="text" onChange={handleOnChange}/>
-        <button onClick={createGroup}>Create Group!</button>
+        <button onClick={createGroup}>Create Group</button>
     </div>
   )
 }

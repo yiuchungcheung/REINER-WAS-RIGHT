@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-
+import GroupForm from '../components/groupform'
 const link = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);;
 
 const Create = () => {
@@ -18,7 +18,7 @@ const Create = () => {
                             </div> */}
                             <label for="groupName" class="col-sm-2 col-form-label">Group Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="groupName"></input>
+                                <GroupForm/>
                             </div>
                         </div>
                     </li>
