@@ -20,7 +20,7 @@ const Signup = () => {
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     }
-    
+
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -47,8 +47,9 @@ const Signup = () => {
     }
 
     function writeUserData() {
+        // writing data: https://firebase.google.com/docs/database/web/read-and-write
         const db = getDatabase();
-        set(ref(db, 'users/' + '1'), { // get userId from auth = getAuth();
+        set(ref(db, 'users/' + '1'), { // get userId from auth = getAuth(); // https://firebase.google.com/docs/auth/web/password-auth#web-version-9_1
             email: email
         });
     }
