@@ -3,7 +3,8 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import "./signup.css";
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
-import { getDatabase } from 'firebase/database';
+import { getDatabase, ref, set } from 'firebase/database';
+export {auth} from '../firebase';
 
 
 const Signup = () => {
@@ -14,12 +15,12 @@ const Signup = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    //
-    const db = getDatabase;
-    const usersRef = ref(db, "users");
-    usersRef.push({username: + userName, fname: + fname, lname: + lname, email: + emailRef, dob: + dob});
+    const [email, setEmail] = useState("");
 
-    //
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    }
+    
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -34,13 +35,22 @@ const Signup = () => {
         try {
             setError('')
             setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
+            writeUserData()
+           // await signup(emailRef.current.value, passwordRef.current.value)
+           
             navigate("/home")
 
         } catch {
             setError('Failed to create an account')
         }
         setLoading(false)
+    }
+
+    function writeUserData() {
+        const db = getDatabase();
+        set(ref(db, 'users/' + '1'), { // get userId from auth = getAuth();
+            email: email
+        });
     }
 
     return (
@@ -55,7 +65,7 @@ const Signup = () => {
                         <Form onSubmit={handleSubmit}>
                             <Form.Group id="email">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" placeholder="email" ref={emailRef} required />
+                                <Form.Control type="email" placeholder="email" ref={emailRef} onChange={handleEmailChange} required />
                             </Form.Group>
                             <Form.Group id="password">
                                 <Form.Label>Password</Form.Label>
