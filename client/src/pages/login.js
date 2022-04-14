@@ -3,7 +3,10 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import "./login.css";
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
+// global uid variable (?)
+// const uid = {};
 
 const Login = () => {
     const emailRef = useRef();
@@ -19,11 +22,33 @@ const Login = () => {
         try {
             setError('')
             setLoading(true)
-            await login(emailRef.current.value, passwordRef.current.value)
+            // await login(emailRef.current.value, passwordRef.current.value)
+            const auth = getAuth();
+            let response = await signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                
+                // global uid variable
+                // uid = user.uid;
+                
+                // debug
+                // console.log('successfully signed in ' + emailRef.current.value + ' (' + user.uid + ')');
+                //
+            })
+
+            // add successful login popup?
             navigate("/home")
 
-        } catch {
-            setError('Failed to log in')
+        } catch (error) {
+            console.log(error)
+            console.log(error.message)
+            if (error.message.includes('user-not-found')) {
+                setError('User not found')
+            } else if (error.message.includes('wrong-password')) {
+                setError('Incorrect password')
+            } else {
+                setError('Failed to log in')
+            }
         }
         setLoading(false)
     }
@@ -56,4 +81,3 @@ const Login = () => {
     );
 }
 export default Login;
-
