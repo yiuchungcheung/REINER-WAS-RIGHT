@@ -4,8 +4,8 @@ import "./signup.css";
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { getDatabase, ref, set } from 'firebase/database';
+import { getAuth, createUserWithEmailAndPassword  } from "firebase/auth";
 export {auth} from '../firebase';
-
 
 const Signup = () => {
     const emailRef = useRef();
@@ -18,38 +18,57 @@ const Signup = () => {
     const [email, setEmail] = useState("");
 
     const handleEmailChange = (event) => {
-        setEmail(event.target.value);
+        setEmail(emailRef.current.value);
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
-
-        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-            return setError('Passwords do not match')
-        }
-
-        // if (passwordRef.current.value || passwordConfirmRef.current.value.length <= 5 ) {
-        //     return setError('Your password needs to have more than 6 characters')
-        // }
-
+        
         try {
             setError('')
             setLoading(true)
-            writeUserData()
-           // await signup(emailRef.current.value, passwordRef.current.value)
+            
+            // debug
+            // console.log(emailRef.current.value);
+            // 
+
+            if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+                throw new Error('Passwords do not match')
+            }
+
+            const auth = getAuth();
+            let response = await createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log(user.uid);
+                    writeUserData(user.uid)
+                })
            
             navigate("/home")
+            // add successful account creation popup?
+        } catch (error) {
+            console.log(error)
+            console.log(error.message)
+            if (error.message.includes("email-already-in-use")) {
+                setError('Email already in use')
+            } 
+            else if (error.message.includes("weak-password")) {
+                setError('Password should be at least 6 characters')
+            } else if (error.message.includes('Passwords do not match')) {
+                setError('Passwords do not match')
+            }
+            else {
+                setError('Failed to create an account')
+            }
 
-        } catch {
-            setError('Failed to create an account')
         }
         setLoading(false)
     }
 
-    function writeUserData() {
+    function writeUserData(uid) {
         // writing data: https://firebase.google.com/docs/database/web/read-and-write
         const db = getDatabase();
-        set(ref(db, 'users/' + '1'), { // get userId from auth = getAuth(); // https://firebase.google.com/docs/auth/web/password-auth#web-version-9_1
+        set(ref(db, 'users/' + uid), { // get userId from auth = getAuth(); // https://firebase.google.com/docs/auth/web/password-auth#web-version-9_1
             email: email
         });
     }
