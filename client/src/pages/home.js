@@ -1,8 +1,19 @@
 import React from 'react';
 import "./home.css";
+import { getAuth } from "firebase/auth";
 
 
 const Home = () => {
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+        console.log('user successfully logged in')
+        // console.log('welcome, user ' + user.uid);
+      } else {
+        console.log('no user signed in');
+      }
+    
 
     // want to redirect them to /prompt?group1, /prompt?group2 etc. but need to get name of the group
     function redirectGroup(route) {
