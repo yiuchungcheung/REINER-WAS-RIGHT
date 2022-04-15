@@ -1,11 +1,16 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
-
+import { auth } from '../firebase';
 
 
 
 const Nav = () => {
+    
+        function logout() {
+        auth.signOut();
+        window.location.assign("/");
+    }
     return (
 
         <div>
@@ -21,7 +26,7 @@ const Nav = () => {
                         <div id="nav-buttons">
                         <a href="#/create" class="solid btn btn-primary btn-md mr-5"  role="button" aria-disabled="true">Create Group</a>
                         <a href="#/join" class="solid btn btn-secondary btn-md green" role="button" aria-disabled="true">Join Group</a>
-                        <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" onClick={logout}>Logout</a></li>
                         </div>
                         </ul>
                     </div>
