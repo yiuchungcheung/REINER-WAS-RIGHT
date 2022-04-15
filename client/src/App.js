@@ -1,4 +1,5 @@
 import Home from "./pages/home";
+import Join from "./pages/join";
 import Create from "./pages/create";
 import Splash from "./pages/splash.js";
 import Nav from "././components/navbar";
@@ -33,6 +34,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/home" element={<Home />} />
               <Route path="/create" element={<Create />} />
+              <Route path="/join" element={<Join />} />
               <Route path="/prompt" element={<Prompt />} />
               <Route path="/history" element={<HistoryPrompt />} />
             </Routes>
