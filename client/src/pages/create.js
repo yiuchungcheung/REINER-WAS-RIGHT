@@ -1,4 +1,4 @@
-import { getDatabase, ref, set } from 'firebase/database';
+import { getDatabase, ref, set, push } from 'firebase/database';
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; //https://firebase.google.com/docs/auth/web/manage-users
@@ -10,6 +10,9 @@ const Create = () => {
     const [linkName, setLinkName] = useState("");
     const [authId, setAuthId] = useState("")
     
+    const db = getDatabase();
+    const groupsRef = ref(db, 'groups');
+
     const handleGroupChange = (e) => {
         setGroup(e.target.value)
         setLinkName(link)
@@ -22,16 +25,21 @@ const Create = () => {
             }
         })
     }
-    function writeGroupData() {
-        const db = getDatabase();
-                set(ref(db, 'groups/'+ '7'), {
-                    g_id: linkName,
-                    groupname: group
-                })
-                set(ref(db, 'groups/7/members'),{
-                members: authId
-                });
+
+    async function writeGroupData() {
+        const newGroupRef = push(groupsRef);
+        const newGroupKey = newGroupRef.key;
+        console.log('group key: ' + newGroupKey);
+        set(newGroupRef, {
+            g_id: linkName,
+            groupname: group
+        })
+        const newMemberRef = ref(db, 'groups/' + newGroupKey + '/members')
+        set(newMemberRef,{
+            member_id: authId
+        });
     }
+    
     return (
         <div>
             <h3>Create page</h3>
