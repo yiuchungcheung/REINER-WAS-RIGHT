@@ -14,7 +14,7 @@ const Join = () => {
         console.log('user successfully logged in ' + user.uid);
         // console.log('welcome, user ' + user.uid);
     } else {
-    console.log('no user signed in');
+        console.log('no user signed in');
     }
 
     // Get a database reference to our posts
@@ -37,13 +37,14 @@ const Join = () => {
             navigate('/home');
         }
 
-        console.log(roomRef.current.value);
-        const data = null;
+        console.log('room code: ' + roomRef.current.value);
+        var data = null;
         onValue(dbRef, (snapshot) => {
             data = snapshot.val();
-          });
+            console.log('onVal');
+        });
 
-        console.log(data);
+        console.log('groups: ' + data);
         for (var key in data) {
             if (data.hasOwnProperty(key)) {
                 console.log(key + "--> " + data[key]);
