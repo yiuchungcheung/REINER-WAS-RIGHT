@@ -26,6 +26,7 @@ const Join = () => {
 
     async function handleSubmit() {
         if (verifyGroup()) {
+            console.log('in if');
             addUserToGroup();
         }
     }
@@ -44,32 +45,36 @@ const Join = () => {
             console.log('onVal');
         });
 
-        console.log('groups: ' + data);
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                console.log(key + "--> " + data[key]);
-                const curGroup = data[key];
-                for (var groupKey in curGroup) {
-                    if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id') {
-                        console.log(groupKey + ' ' + curGroup[groupKey]);
-                        const code = curGroup[groupKey];
-                        if (code == roomRef.current.value) {
-                            groupIndex = key;
-                            return true; // found room code specified by user
-                        }
-                    }
-                }
-            }
-        }
-        return false; // did not find room code specified by user
+        // console.log('groups: ' + data);
+        // for (var key in data) {
+        //     if (data.hasOwnProperty(key)) {
+        //         console.log(key + "--> " + data[key]);
+        //         const curGroup = data[key];
+        //         for (var groupKey in curGroup) {
+        //             if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id') {
+        //                 console.log(groupKey + ' ' + curGroup[groupKey]);
+        //                 const code = curGroup[groupKey];
+        //                 if (code == roomRef.current.value) {
+        //                     groupIndex = key;
+        //                     return true; // found room code specified by user
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        return true; // did not find room code specified by user
     }
 
     function addUserToGroup() {
         const groupRef = ref(db, 'groups/' + groupIndex + '/members');
-        const membersRef = push(groupRef);
+        const membersRef = push(groupRef)
+            .catch((e) => {
+                console.log(e);
+                console.log(e.message);
+            });
         set(membersRef, {
             member_id: user.uid
-        });
+        })
     }
 
     return (
@@ -77,7 +82,7 @@ const Join = () => {
             <h3>Join a Group!</h3>
             <Card>
                 <Card.Body>
-                    <Form >
+                    <Form onSubmit={handleSubmit}>
                         <Form.Group id="groupName">
                             <Form.Label>Group Name</Form.Label>
                             <Form.Control type="text" placeholder="Group Name" ref={roomRef} required />
