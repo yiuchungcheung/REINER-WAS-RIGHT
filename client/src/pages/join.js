@@ -1,18 +1,81 @@
-import { getDatabase,ref, set } from 'firebase/database';
+import { getDatabase,ref, set , push, onValue } from 'firebase/database';
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { getAuth } from "firebase/auth";
+
 
 const Join = () => {
+    const [error, setError] = useState("");
+    // user information
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    // db reference
+    const db = getDatabase();
+    const dbRef = ref(db, 'groups');
+
+    const roomRef = useRef(); // reference to room code field that user inputs
+    const groupMap = {}; // maps (firebase) unique id to the group's room code
+    const [groupId, setGroupId] = useState("");
+
+    if (user) {
+        console.log('user successfully logged in ' + user.uid);
+        // console.log('welcome, user ' + user.uid);
+    } else {
+        console.log('no user signed in');
+    }
+
+    async function handleSubmit() {
+        if (roomRef.current.value in groupMap) {
+            setGroupId(groupMap[roomRef.current.value]);
+            addUserToGroup();
+        } else {
+            setError('Invalid room code');
+        }
+    }
+
+    function addUserToGroup() {
+        // some bug in here
+        console.log('add user to group');
+        const groupRef = ref(db, 'groups/' + groupId + '/members');
+        const membersRef = push(groupRef)
+            .catch((e) => {
+                console.log(e);
+                console.log(e.message);
+            });
+        set(membersRef, {
+            member_id: user.uid
+        })
+    }
+
+    onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        console.log(data);
+
+        // populate set of valid, existing room codes
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                const curGroup = data[key];
+                for (var groupKey in curGroup) {
+                    if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id') {
+                        // console.log(groupKey + ' ' + curGroup[groupKey]); // debug
+                        groupMap[curGroup[groupKey]] = key; // add g_id to group key list
+                    }
+                }
+            }
+        }
+    });
 
     return (
         <div>
             <h3>Join a Group!</h3>
             <Card>
                 <Card.Body>
-                    <Form >
+                    {error && <Alert variant="danger">{error}</Alert>}
+                    <Form onSubmit={handleSubmit}>
                         <Form.Group id="groupName">
                             <Form.Label>Group Name</Form.Label>
-                            <Form.Control type="text" placeholder="Group Name" required />
+                            <Form.Control type="text" placeholder="Group Name" ref={roomRef} required />
                         </Form.Group>
                         <Button className="w-100 mt-4 outline" type="submit">Create</Button>
                     </Form>
