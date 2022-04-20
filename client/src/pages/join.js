@@ -77,8 +77,7 @@ const Join = () => {
             <h3>Join a Group!</h3>
             <Card>
                 <Card.Body>
-                    <h2 className="text-center mb-4">Room Code: </h2>
-                    <Form onSubmit={handleSubmit}>
+                    <Form >
                         <Form.Group id="groupName">
                             <Form.Label>Group Name</Form.Label>
                             <Form.Control type="text" placeholder="Group Name" ref={roomRef} required />
