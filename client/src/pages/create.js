@@ -5,6 +5,16 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'; //https://firebase.
 const link = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);;
 
 const Create = () => {
+    // user information
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+        console.log('user successfully logged in');
+        // console.log('welcome, user ' + user.uid);
+    } else {
+        console.log('no user signed in');
+    }
+
     const groupRef = useRef();
     const [group, setGroup] = useState("");
     const [linkName, setLinkName] = useState("");

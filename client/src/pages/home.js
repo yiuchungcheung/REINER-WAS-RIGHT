@@ -10,9 +10,9 @@ const Home = () => {
     if (user) {
         console.log('user successfully logged in')
         // console.log('welcome, user ' + user.uid);
-      } else {
-        console.log('no user signed in');
-      }
+    } else {
+    console.log('no user signed in');
+    }
     
 
     // want to redirect them to /prompt?group1, /prompt?group2 etc. but need to get name of the group
