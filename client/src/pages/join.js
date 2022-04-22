@@ -15,8 +15,7 @@ const Join = () => {
     const dbRef = ref(db, 'groups');
 
     const roomRef = useRef(); // reference to room code field that user inputs
-    const groupMap = {}; // maps (firebase) unique id to the group's room code
-    const [groupId, setGroupId] = useState("");
+    const groupMap = {}; // maps (firebase) unique id to the group's room code (key: firebase unique id; value: group room code)
 
     if (user) {
         console.log('user successfully logged in ' + user.uid);
@@ -26,24 +25,28 @@ const Join = () => {
     }
 
     async function handleSubmit() {
-        if (roomRef.current.value in groupMap) {
-            setGroupId(groupMap[roomRef.current.value]);
-            addUserToGroup();
+        // console.log('roomref: ' + roomRef.current.value);
+        // console.log(Object.keys(groupMap));
+        // console.log(Object.values(groupMap));
+        if (Object.keys(groupMap).includes(roomRef.current.value)) { /*roomRef.current.value in groupMap*/
+            let groupId = groupMap[roomRef.current.value];
+            console.log('group id: ' + groupId);
+            addUserToGroup(groupId);
         } else {
             setError('Invalid room code');
         }
     }
 
-    function addUserToGroup() {
+    function addUserToGroup(groupId) {
         // some bug in here
         console.log('add user to group');
-        const groupRef = ref(db, 'groups/' + groupId + '/members');
-        const membersRef = push(groupRef)
-            .catch((e) => {
-                console.log(e);
-                console.log(e.message);
-            });
-        set(membersRef, {
+        const memberListRef = ref(db, 'groups/' + groupId + '/members');
+        const newMemberRef = push(memberListRef);
+            // .catch((e) => {
+            //     console.log(e);
+            //     console.log(e.message);
+            // });
+        set(newMemberRef, {
             member_id: user.uid
         })
     }
