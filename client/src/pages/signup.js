@@ -4,8 +4,8 @@ import "./signup.css";
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { getDatabase, ref, set } from 'firebase/database';
-import { getAuth, createUserWithEmailAndPassword  } from "firebase/auth";
-export {auth} from '../firebase';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+export { auth } from '../firebase';
 
 const Signup = () => {
     const emailRef = useRef();
@@ -23,11 +23,11 @@ const Signup = () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        
+
         try {
             setError('')
             setLoading(true)
-            
+
             // debug
             // console.log(emailRef.current.value);
             // 
@@ -43,7 +43,7 @@ const Signup = () => {
                     console.log(user.uid);
                     writeUserData(user.uid)
                 })
-           
+
             navigate("/home")
             // add successful account creation popup?
         } catch (error) {
@@ -51,7 +51,7 @@ const Signup = () => {
             console.log(error.message)
             if (error.message.includes("email-already-in-use")) {
                 setError('Email already in use')
-            } 
+            }
             else if (error.message.includes("weak-password")) {
                 setError('Password should be at least 6 characters')
             } else if (error.message.includes('Passwords do not match')) {

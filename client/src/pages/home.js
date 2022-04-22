@@ -1,24 +1,45 @@
-import React from 'react';
-import "./home.css";
+import { React, useState } from 'react';
+import { getDatabase, ref, onValue } from 'firebase/database';
 import { getAuth } from "firebase/auth";
+import "./home.css";
+import GroupData from '../components/createGroup';
+
 
 
 const Home = () => {
+    const [memberInfo, setMemberInfo] = useState('');
 
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
         console.log('user successfully logged in')
-        // console.log('welcome, user ' + user.uid);
-      } else {
-        console.log('no user signed in');
-      }
-    
+        //const member_id = auth.currentUser.uid
 
-    // want to redirect them to /prompt?group1, /prompt?group2 etc. but need to get name of the group
+
+        // works, recieve users uid
+        // console.log('welcome, user ' + user.uid);
+    } else {
+        console.log('no user signed in');
+    }
     function redirectGroup(route) {
         window.location.assign(route);
     }
+
+    const db = getDatabase();
+    const dataRef = ref(db, '/groups');
+    let studentList = [];
+    onValue(dataRef, (snapshot) => {
+        snapshot.forEach((groupSnapshot) => {
+            //console.log(groupSnapshot.key); //firebase key
+            const thisInfo = (groupSnapshot.child("groupname").val()); //g_id
+            studentList.push(thisInfo)
+            setMemberInfo(studentList)
+            console.log(memberInfo)
+            //snapshot.child("members").forEach((memberSnapshot) => {
+                //console.log(memberSnapshot)
+            //});
+        })
+    })
 
 
 
@@ -31,13 +52,16 @@ const Home = () => {
 
             <ul class="list-group container-fluid">
                 <li class="list-group-item table-title" >Groups for You</li>
-                <li class="list-group-item" onClick={() => {redirectGroup("/create");}}>+ create a group</li>
+                <li class="list-group-item" onClick={() => { redirectGroup("/create"); }}>+ create a group</li>
 
                 {/* when groups are created, add ID tag to each created group */}
                 {/* adding ? after /prompt to direct to dediated group prompt interface using the group's ID*/}
-                <li class="list-group-item" id="informatics-capstone" onClick={(e) => {redirectGroup("/prompt?" + e.currentTarget.id);}}>Informatics Capstone</li>
+                <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li>
                 <li class="list-group-item">Group 2</li>
                 <li class="list-group-item">Group 3</li>
+                <li>{memberInfo}</li>
+                {/* <GroupData/> */}
+
             </ul>
         </div>
     );
