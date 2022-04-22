@@ -1,4 +1,4 @@
-import { getDatabase,ref, set , push, onValue } from 'firebase/database';
+import { getDatabase, ref, set , push, onValue } from 'firebase/database';
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { getAuth } from "firebase/auth";

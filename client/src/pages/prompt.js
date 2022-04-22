@@ -1,3 +1,5 @@
+import { getDatabase, ref, set, onValue } from 'firebase/database';
+import { getAuth } from "firebase/auth";
 import React from 'react';
 import "./prompt.css";
 
@@ -10,6 +12,17 @@ const Prompt = () => {
     // db reference
     const db = getDatabase();
     const dbRef = ref(db, 'questions');
+
+    if (user) {
+        console.log('user successfully logged in ' + user.uid);
+    } else {
+        console.log('no user signed in');
+    }
+
+    onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        console.log(data);
+      });
 
     const currentDate = new Date();
     const date = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
