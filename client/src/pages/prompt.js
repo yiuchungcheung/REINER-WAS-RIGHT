@@ -19,10 +19,28 @@ const Prompt = () => {
         console.log('no user signed in');
     }
 
+    const questionBank = [];
+
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
-        console.log(data);
+        // console.log(data);
+        populateQuestions(data);
       });
+
+    const todaysQuestion = selectDailyQuestion();
+
+    function populateQuestions(data) {
+        for (var key in Object.keys(data)) {
+            questionBank.push(data[key]['question']);
+        }
+    }
+
+    function selectDailyQuestion() {
+        const rand = Math.floor(Math.random() * questionBank.length);
+        console.log(rand);
+        console.log("today's question: " + questionBank[rand]);
+        return questionBank[rand];
+    }
 
     const currentDate = new Date();
     const date = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
