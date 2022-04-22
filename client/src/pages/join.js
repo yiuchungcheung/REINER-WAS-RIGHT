@@ -19,13 +19,12 @@ const Join = () => {
 
     if (user) {
         console.log('user successfully logged in ' + user.uid);
-        // console.log('welcome, user ' + user.uid);
     } else {
         console.log('no user signed in');
     }
 
     async function handleSubmit() {
-        if (Object.keys(groupMap).includes(roomRef.current.value)) { /*roomRef.current.value in groupMap*/
+        if (Object.keys(groupMap).includes(roomRef.current.value)) {
             let groupId = groupMap[roomRef.current.value];
             console.log('group id: ' + groupId);
             addUserToGroup(groupId);
@@ -39,10 +38,6 @@ const Join = () => {
         console.log('add user to group');
         const memberListRef = ref(db, 'groups/' + groupId + '/members');
         const newMemberRef = push(memberListRef);
-            // .catch((e) => {
-            //     console.log(e);
-            //     console.log(e.message);
-            // });
         set(newMemberRef, {
             member_id: user.uid
         })
