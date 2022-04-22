@@ -25,9 +25,6 @@ const Join = () => {
     }
 
     async function handleSubmit() {
-        // console.log('roomref: ' + roomRef.current.value);
-        // console.log(Object.keys(groupMap));
-        // console.log(Object.values(groupMap));
         if (Object.keys(groupMap).includes(roomRef.current.value)) { /*roomRef.current.value in groupMap*/
             let groupId = groupMap[roomRef.current.value];
             console.log('group id: ' + groupId);
