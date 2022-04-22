@@ -3,9 +3,16 @@ import "./prompt.css";
 
 
 const Prompt = () => {
+    // user information
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-    const current = new Date();
-    const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
+    // db reference
+    const db = getDatabase();
+    const dbRef = ref(db, 'questions');
+
+    const currentDate = new Date();
+    const date = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
 
     // will need to change this to random prompts 
     const prompt = "Would you like to be famous? In what way?";
