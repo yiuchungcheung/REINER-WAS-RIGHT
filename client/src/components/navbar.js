@@ -2,13 +2,23 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import { auth } from '../firebase';
-
+import { getAuth, signOut } from "firebase/auth";
 
 
 const Nav = () => {
     
-        function logout() {
-        auth.signOut();
+    function logout() {
+        const auth = getAuth();
+
+        const currentUser = auth.currentUser;
+
+        signOut(auth).then(() => {
+            console.log('sign out ' + currentUser.uid + ' successful.')
+          }).catch((error) => {
+            console.log(error.code);
+            console.log(error.message);
+          });
+          
         window.location.assign("/");
     }
     return (

@@ -35,7 +35,8 @@ const Create = () => {
             g_id: linkName,
             groupname: group
         })
-        const newMemberRef = ref(db, 'groups/' + newGroupKey + '/members')
+        const memberListRef = ref(db, 'groups/' + newGroupKey + '/members');
+        const newMemberRef = push(memberListRef);
         set(newMemberRef,{
             member_id: authId
         });
