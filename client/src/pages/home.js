@@ -5,7 +5,7 @@ import "./home.css";
 
 const Home = () => {
 
-    const [memberInfo, setMemberInfo] = useState('');
+    const [memberInfo, setMemberInfo] = useState([]);
     const auth = getAuth();
     const user = auth.currentUser;
     const memberId = auth.currentUser.uid
@@ -13,33 +13,33 @@ const Home = () => {
     useEffect(() => {
         const db = getDatabase();
         const dbRef = ref(db, 'groups');
-        let groupDataMap = {};
         let groupArr = [];
-        let memberArr = [];
+        
 
-        //get group name's if member_id(user) matches member id
         onValue(dbRef, (snapshot) => {
             const data = snapshot.val();
-
+            let memberArr = [];
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    groupDataMap = data[key]
-                    console.log(groupDataMap)
-                    
-                    // groupDataMap = groupname.groupname
-                    //     groupArr.push(groupDataMap)
-                    //     console.log(groupArr)
-                    //     setMemberInfo(groupArr)
+                    groupArr = data[key]
                 }
             }
+            snapshot.forEach((groupSnapshot) => {
+                var memberValue = (groupSnapshot.child('members').val())
+                var uniqueMemberArr = (Object.values(memberValue))
+                uniqueMemberArr.forEach((memberObj) => {
+                    if(memberObj.member_id == memberId) {
+                        memberArr.push((groupSnapshot.child('groupname').val()))
+                    }
+                })
+            })
+            setMemberInfo(memberArr)
         })
     },
         []);
 
-
     if (user) {
         console.log('user successfully logged in')
-        //const member_id = auth.currentUser.uid
 
     } else {
         console.log('no user signed in');
@@ -47,8 +47,6 @@ const Home = () => {
     function redirectGroup(route) {
         window.location.assign(route);
     }
-
-
 
     return (
         <div>
@@ -64,9 +62,9 @@ const Home = () => {
                 {/* when groups are created, add ID tag to each created group */}
                 {/* adding ? after /prompt to direct to dediated group prompt interface using the group's ID*/}
                 <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li>
-                <li class="list-group-item">Group 2</li>
-                <li class="list-group-item">Group 3</li>
-                <li class="list-group-item">{memberInfo}</li>
+                {memberInfo.map(function(groupname, index){
+                    return <li class="list-group-item" key={ index }>{groupname}</li>;
+                  })}
             </ul>
         </div>
     );
