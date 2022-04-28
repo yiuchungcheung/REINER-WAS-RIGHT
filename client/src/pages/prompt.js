@@ -1,9 +1,19 @@
 import React from 'react';
+import { getDatabase,ref, onValue } from 'firebase/database';
+import {getAuth} from 'firebase/auth';
 import "./prompt.css";
 
 
 const Prompt = () => {
+    // db reference
+    const db = getDatabase();
+    const dbRef = ref(db, 'groups');
 
+    // user info
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    // current date
     const current = new Date();
     const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
 
@@ -12,8 +22,11 @@ const Prompt = () => {
 
     // function that submits the user response
     function submitResponse() {
-        // code here
     }
+
+    onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+    });
 
     return (
         <div>
