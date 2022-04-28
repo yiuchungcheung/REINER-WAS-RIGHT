@@ -19,7 +19,7 @@ const Nav = () => {
             console.log(error.message);
           });
           
-        window.location.assign("/");
+        window.location.replace("https://yejukim.github.io/moment.github.io/");
     }
     return (
 
