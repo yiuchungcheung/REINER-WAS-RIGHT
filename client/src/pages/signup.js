@@ -56,8 +56,7 @@ const Signup = () => {
                 setError('Password should be at least 6 characters')
             } else if (error.message.includes('Passwords do not match')) {
                 setError('Passwords do not match')
-            }
-            else {
+            } else {
                 setError('Failed to create an account')
             }
 
