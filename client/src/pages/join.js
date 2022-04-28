@@ -36,7 +36,7 @@ const Join = () => {
     }
 
     function addUserToGroup(groupId) {
-        // some bug in here
+        // throw error when user tries to join a group they are already in
         console.log('add user to group');
         const memberListRef = ref(db, 'groups/' + groupId + '/members');
         const newMemberRef = push(memberListRef);
