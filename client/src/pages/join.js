@@ -23,11 +23,13 @@ const Join = () => {
         console.log('no user signed in');
     }
 
-    async function handleSubmit() {
+    async function handleSubmit(e) {
+        e.preventDefault();
         if (Object.keys(groupMap).includes(roomRef.current.value)) {
             let groupId = groupMap[roomRef.current.value];
             console.log('group id: ' + groupId);
             addUserToGroup(groupId);
+            window.location.assign("/home");
         } else {
             setError('Invalid room code');
         }
@@ -38,6 +40,7 @@ const Join = () => {
         console.log('add user to group');
         const memberListRef = ref(db, 'groups/' + groupId + '/members');
         const newMemberRef = push(memberListRef);
+        
         set(newMemberRef, {
             member_id: user.uid
         })
@@ -68,11 +71,11 @@ const Join = () => {
                 <Card.Body>
                     {error && <Alert variant="danger">{error}</Alert>}
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group id="groupName">
-                            <Form.Label>Group Name</Form.Label>
-                            <Form.Control type="text" placeholder="Group Name" ref={roomRef} required />
+                        <Form.Group id="roomCode">
+                            <Form.Label>Room Code</Form.Label>
+                            <Form.Control type="text" placeholder="Room Code" ref={roomRef} required />
                         </Form.Group>
-                        <Button className="w-100 mt-4 outline" type="submit">Create</Button>
+                        <Button className="w-100 mt-4 outline" type="submit">Join</Button>
                     </Form>
                 </Card.Body>
             </Card>

@@ -63,7 +63,7 @@ const Home = () => {
                 {/* adding ? after /prompt to direct to dediated group prompt interface using the group's ID*/}
                 <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li>
                 {memberInfo.map(function(groupname, index){
-                    return <li class="list-group-item" key={ index }>{groupname}</li>;
+                    return <li class="list-group-item" key={ index } onClick={(e) => { redirectGroup("/prompt?" + groupname); }}>{groupname}</li>;
                   })}
             </ul>
         </div>
