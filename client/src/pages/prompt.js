@@ -17,10 +17,12 @@ const Prompt = () => {
 
     return (
         <div>
-            <h1>Today's Prompt</h1>
-            <p>{date}</p>
+            <h1>Group Name</h1>
+            <h2>Room Code: {}</h2>
             <div>
                 <ul class="list-group container-fluid">
+                    <h2>Today's Prompt</h2>
+                    <p>{date}</p>
                     <li class="list-group-item">{prompt}</li>
                     {/* <div class="collapse" id="collapseExample">
                         <div class="card list-group-item card-body">
