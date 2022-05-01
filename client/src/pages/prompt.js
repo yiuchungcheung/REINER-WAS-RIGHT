@@ -9,6 +9,9 @@ const Prompt = () => {
     const db = getDatabase();
     const dbRef = ref(db, 'groups');
 
+    const groupMap = {}; // maps (firebase) unique id to the group's room code (key: group room code; value: firebase unique id)
+    const roomCode = 'pkfkd'; // CHANGE LATER
+
     // user info
     const auth = getAuth();
     const user = auth.currentUser;
@@ -26,6 +29,26 @@ const Prompt = () => {
 
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
+        let thisGroupKey;
+        // populate set of valid, existing room codes
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                const curGroup = data[key];
+                for (var groupKey in curGroup) {
+                    if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id' && curGroup[groupKey] == roomCode) { // get current room's data
+                        thisGroupKey = key;
+                        break;
+                    }
+                }
+                if (thisGroupKey != undefined) {
+                    break;
+                }
+            }
+        }
+        // get today's question, if applicable
+
+        const history = data[thisGroupKey]["history"];
+        console.log(history);
     });
 
     return (
