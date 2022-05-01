@@ -73,16 +73,18 @@ const Prompt = () => {
         }
 
         if (!todaysQuestionExists(data, thisGroupKey)) {
-            // const rand = Math.floor(Math.random() * questionList.length);
-            // console.log(rand);
-            // prompt = questionList[rand];
+            const rand = Math.floor(Math.random() * questionList.length);
+            console.log(rand);
+            prompt = questionList[rand];
         }
-        const rand = Math.floor(Math.random() * questionList.length);
-        console.log(rand);
-        prompt = questionList[rand];
     }, {
         onlyOnce: true
     });
+
+    function updatePrompt (p) {
+        prompt = p;
+        console.log(prompt);
+    }
 
     function todaysQuestionExists(data, groupKey) {
         const history = data[groupKey]["history"];
@@ -101,12 +103,6 @@ const Prompt = () => {
         }
         return false;
     }
-
-    function getTodaysQuestion() {
-        
-    }
-
-    getTodaysQuestion();
 
     return (
         <div>
