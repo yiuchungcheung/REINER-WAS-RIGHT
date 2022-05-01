@@ -49,6 +49,14 @@ const Prompt = () => {
 
         const history = data[thisGroupKey]["history"];
         console.log(history);
+        let todaysPrompt = false;
+        for (let key in history) {
+            if (history.hasOwnProperty(key) && history[key] == 'date') {
+                if (history) {
+                    
+                }
+            }
+        }
     });
 
     return (
