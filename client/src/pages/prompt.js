@@ -25,7 +25,7 @@ const Prompt = () => {
     // console.log("TODAY = " + date);
 
     // will need to change this to random prompts 
-    let prompt;// = "Would you like to be famous? In what way?";
+    let prompt = "Would you like to be famous? In what way?";
 
     // function that submits the user response
     function submitResponse() {
@@ -95,6 +95,7 @@ const Prompt = () => {
                 for (let data in curDay) { // data = date or question
                     if (data == 'date' && curDay[data] == date) {
                         prompt = curDay['question'];
+                        console.log(prompt);
                         return true;
                     }
 
