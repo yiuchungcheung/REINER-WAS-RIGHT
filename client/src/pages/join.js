@@ -63,6 +63,8 @@ const Join = () => {
             }
         }
         console.log(groupMap);
+    }, {
+        onlyOnce: true
     });
 
     return (
