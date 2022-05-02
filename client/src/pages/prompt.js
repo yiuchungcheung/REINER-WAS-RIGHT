@@ -1,11 +1,43 @@
-import React from 'react';
+import { getDatabase, ref, onValue, DataSnapshot } from 'firebase/database';
+import { getAuth } from "firebase/auth";
+import { React, useState, useEffect } from 'react';
 import "./prompt.css";
 
 
 const Prompt = () => {
 
+    const [groupName, setGroupName] = useState('');
+    const [groupId, setGroupId] = useState('');
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const memberId = auth.currentUser.uid
+
     const current = new Date();
     const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
+
+    //grab group name and groupId and display on the webpage
+    useEffect(() => {
+        const db = getDatabase();
+        const dbRef = ref(db, 'groups');
+        let getGroupName = '';
+        let getGroupId = '';
+
+        onValue(dbRef, (snapshot) => {
+            snapshot.forEach((groupSnapshot) => {
+                var memberValue = (groupSnapshot.child('members').val())
+                var uniqueMemberArr = (Object.values(memberValue))
+                uniqueMemberArr.forEach((memberObj) => {
+                    if (memberObj.member_id == memberId) {
+                        getGroupName = (groupSnapshot.child('groupname').val())
+                        getGroupId = (groupSnapshot.child('g_id').val())
+                    }
+                })
+            })
+            setGroupName(getGroupName)
+            setGroupId(getGroupId)
+        });
+    })
+
 
     // will need to change this to random prompts 
     const prompt = "Would you like to be famous? In what way?";
@@ -17,8 +49,8 @@ const Prompt = () => {
 
     return (
         <div>
-            <h1>Group Name</h1>
-            <h2>Room Code: {}</h2>
+            <h1>{groupName}</h1>
+            <h2>{groupId}</h2>
             <div>
                 <ul class="list-group container-fluid">
                     <h2>Today's Prompt</h2>
