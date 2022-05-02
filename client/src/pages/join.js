@@ -15,7 +15,7 @@ const Join = () => {
     const dbRef = ref(db, 'groups');
 
     const roomRef = useRef(); // reference to room code field that user inputs
-    const groupMap = {}; // maps (firebase) unique id to the group's room code (key: firebase unique id; value: group room code)
+    const groupMap = {}; // maps (firebase) unique id to the group's room code (key: group room code; value: firebase unique id)
 
     if (user) {
         console.log('user successfully logged in ' + user.uid);
@@ -62,6 +62,9 @@ const Join = () => {
                 }
             }
         }
+        console.log(groupMap);
+    }, {
+        onlyOnce: true
     });
 
     return (

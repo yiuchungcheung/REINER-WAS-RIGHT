@@ -5,6 +5,9 @@ import "./prompt.css";
 
 
 const Prompt = () => {
+    // db reference
+    const db = getDatabase();
+    const dbRef = ref(db, 'groups');
 
     const [groupName, setGroupName] = useState('');
     const [groupId, setGroupId] = useState('');
@@ -21,6 +24,7 @@ const Prompt = () => {
         const dbRef = ref(db, 'groups');
         let getGroupName = '';
         let getGroupId = '';
+        let roomCode;
 
         onValue(dbRef, (snapshot) => {
             snapshot.forEach((groupSnapshot) => {
@@ -30,6 +34,7 @@ const Prompt = () => {
                     if (memberObj.member_id == memberId) {
                         getGroupName = (groupSnapshot.child('groupname').val())
                         getGroupId = (groupSnapshot.child('g_id').val())
+                        roomCode =  (groupSnapshot.child('g_id').val())
                     }
                 })
             })
@@ -44,8 +49,40 @@ const Prompt = () => {
 
     // function that submits the user response
     function submitResponse() {
-        // code here
     }
+
+    onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        let thisGroupKey;
+        let roomCode;
+        // populate set of valid, existing room codes
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                const curGroup = data[key];
+                for (var groupKey in curGroup) {
+                    if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id' && curGroup[groupKey] == roomCode) { // get current room's data
+                        thisGroupKey = key;
+                        break;
+                    }
+                }
+                if (thisGroupKey != undefined) {
+                    break;
+                }
+            }
+        }
+        // get today's question, if applicable
+
+        const history = data[thisGroupKey]["history"];
+        console.log(history);
+        let todaysPrompt = false;
+        for (let key in history) {
+            if (history.hasOwnProperty(key) && history[key] == 'date') {
+                if (history) {
+
+                }
+            }
+        }
+    });
 
     return (
         <div>
