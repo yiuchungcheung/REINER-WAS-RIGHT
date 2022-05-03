@@ -91,7 +91,7 @@ const Prompt = () => {
             if (data.hasOwnProperty(key)) {
                 const curGroup = data[key];
                 for (var groupKey in curGroup) {
-                    if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id' && curGroup[groupKey] == roomCode) { // get current room's data
+                    if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id' && curGroup[groupKey] == groupId) { // get current room's data
                         thisGroupKey = key;
                         break;
                     }
