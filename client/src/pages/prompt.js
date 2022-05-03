@@ -13,7 +13,7 @@ const Prompt = () => {
     const [groupName, setGroupName] = useState('');
     const [groupId, setGroupId] = useState('');
   
-    const roomCode = 'pkfkd'; // CHANGE LATER
+    // const roomCode = 'pkfkd'; // CHANGE LATER
     const questionList = [];
 
     // user info
@@ -54,7 +54,7 @@ const Prompt = () => {
 
 
     // will need to change this to random prompts 
-    let prompt = "Would you like to be famous? In what way?";
+    let prompt;//  = "Would you like to be famous? In what way?";
 
     // function that submits the user response
     function submitResponse() {
@@ -120,10 +120,6 @@ const Prompt = () => {
         const history = data[groupKey]["history"];
         console.log(history);
         for (let key in history) {
-<<<<<<< HEAD
-            if (history.hasOwnProperty(key) && history[key] == 'date') {
-                if (history) {
-=======
             if (history.hasOwnProperty(key)) { // each history entry; one day
                 const curDay = history[key];
                 for (let data in curDay) { // data = date or question
@@ -132,7 +128,6 @@ const Prompt = () => {
                         console.log(prompt);
                         return true;
                     }
->>>>>>> 4.30prompt
 
                 }
             }
