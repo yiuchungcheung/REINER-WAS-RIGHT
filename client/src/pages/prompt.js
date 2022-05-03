@@ -8,15 +8,24 @@ const Prompt = () => {
     // db reference
     const db = getDatabase();
     const dbRef = ref(db, 'groups');
+    const questionRef = ref(db, 'questions');
 
     const [groupName, setGroupName] = useState('');
     const [groupId, setGroupId] = useState('');
+  
+    const roomCode = 'pkfkd'; // CHANGE LATER
+    const questionList = [];
+
+    // user info
     const auth = getAuth();
     const user = auth.currentUser;
     const memberId = auth.currentUser.uid
+    let thisGroupKey;
+    let roomData;
 
     const current = new Date();
     const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
+    // console.log("TODAY = " + date);
 
     //grab group name and groupId and display on the webpage
     useEffect(() => {
@@ -45,16 +54,38 @@ const Prompt = () => {
 
 
     // will need to change this to random prompts 
-    const prompt = "Would you like to be famous? In what way?";
+    let prompt = "Would you like to be famous? In what way?";
 
     // function that submits the user response
     function submitResponse() {
     }
 
+    // get questions
+    onValue(questionRef, (snapshot) => {
+        const data = snapshot.val();
+        for (let key in data) {
+            if (data.hasOwnProperty(key)) { // each question object
+                const questionObj = data[key];
+                for (let field in questionObj) {
+                    if (field == 'question') {
+                        questionList.push(questionObj[field]);
+                    }
+                }
+            }
+        }
+    }, {
+        onlyOnce: true
+    });
+
+    function updateRoomData(data) {
+        roomData = data;
+        console.log(roomData);
+    }
+
+    // get current room data
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
         let thisGroupKey;
-        let roomCode;
         // populate set of valid, existing room codes
         for (var key in data) {
             if (data.hasOwnProperty(key)) {
@@ -70,19 +101,44 @@ const Prompt = () => {
                 }
             }
         }
-        // get today's question, if applicable
 
-        const history = data[thisGroupKey]["history"];
+        if (!todaysQuestionExists(data, thisGroupKey)) {
+            const rand = Math.floor(Math.random() * questionList.length);
+            console.log(rand);
+            prompt = questionList[rand];
+        }
+    }, {
+        onlyOnce: true
+    });
+
+    function updatePrompt (p) {
+        prompt = p;
+        console.log(prompt);
+    }
+
+    function todaysQuestionExists(data, groupKey) {
+        const history = data[groupKey]["history"];
         console.log(history);
-        let todaysPrompt = false;
         for (let key in history) {
+<<<<<<< HEAD
             if (history.hasOwnProperty(key) && history[key] == 'date') {
                 if (history) {
+=======
+            if (history.hasOwnProperty(key)) { // each history entry; one day
+                const curDay = history[key];
+                for (let data in curDay) { // data = date or question
+                    if (data == 'date' && curDay[data] == date) {
+                        prompt = curDay['question'];
+                        console.log(prompt);
+                        return true;
+                    }
+>>>>>>> 4.30prompt
 
                 }
             }
         }
-    });
+        return false;
+    }
 
     return (
         <div>
