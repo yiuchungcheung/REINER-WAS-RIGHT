@@ -2,10 +2,14 @@ import { getDatabase, ref, onValue, DataSnapshot, set, push } from 'firebase/dat
 import { getAuth } from "firebase/auth";
 import { React, useState, useEffect } from 'react';
 import "./prompt.css";
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 
 const Prompt = () => {
+
     const db = getDatabase();
+    const realGroupName = useParams();
+    console.log(realGroupName)
     const dbRef = ref(db, 'groups');
 
     const [responseInfo, setResponseInfo] = useState([]);
@@ -22,6 +26,8 @@ const Prompt = () => {
     const current = new Date();
     const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
 
+
+
     //grab group name and groupId and display on the webpage
     useEffect(() => {
         const db = getDatabase();
@@ -34,17 +40,20 @@ const Prompt = () => {
         let tempArrQuestions = [];
         let getPromptId;
 
+        //gets groupname and groupid
         onValue(dbRef, (snapshot) => {
             snapshot.forEach((groupSnapshot) => {
-
                 var memberValue = (groupSnapshot.child('members').val())
                 var uniqueMemberArr = (Object.values(memberValue))
                 uniqueMemberArr.forEach((memberObj) => {
                     if (memberObj.member_id == memberId) {
-                        getGroupName = (groupSnapshot.child('groupname').val())
+                        getGroupName = (groupSnapshot.child(' ').val())
                         getGroupId = (groupSnapshot.child('g_id').val())
                         roomCode = (groupSnapshot.child('g_id').val())
                         getGroupKey = (groupSnapshot.key)
+                        console.log(getGroupName)
+                        console.log(getGroupId)
+                        console.log(getGroupKey)
                     }
                 })
             })
@@ -70,83 +79,76 @@ const Prompt = () => {
                 var historyValues = (groupsnapshot.child('history').val())
                 var uniqueHistoryArr = (Object.values(historyValues))
                 uniqueHistoryArr.forEach((historyObj) => {
-                    tempPromptArr.push(historyObj.response)
+                    if (groupName === (groupsnapshot.child('groupname').val())) {
+                        tempPromptArr.push(historyObj.response)
+                        console.log(tempPromptArr)
+                    }
                 });
             });
             setResponseInfo(tempPromptArr)
         })
     },
-    []);
+        []);
 
-        // will need to change this to random prompts 
-        const prompt = "Would you like to be famous? In what way?";
 
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            let thisGroupKey;
-            let roomCode;
-            // populate set of valid, existing room codes
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    const curGroup = data[key];
-                    for (var groupKey in curGroup) {
-                        if (curGroup.hasOwnProperty(groupKey) && groupKey === 'g_id' && curGroup[groupKey] === roomCode) {
-                            // get current room's data
-                            thisGroupKey = key;
-                            break;
-                        }
-                    }
-                    if (thisGroupKey != undefined) {
+    // will need to change this to random prompts 
+    const prompt = "Would you like to be famous? In what way?";
+
+    onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        let thisGroupKey;
+        let roomCode;
+        // populate set of valid, existing room codes
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                const curGroup = data[key];
+                for (var groupKey in curGroup) {
+                    if (curGroup.hasOwnProperty(groupKey) && groupKey === 'g_id' && curGroup[groupKey] === roomCode) {
+                        // get current room's data
+                        thisGroupKey = key;
                         break;
                     }
                 }
+                if (thisGroupKey != undefined) {
+                    break;
+                }
             }
-            // get today's question, if applicable
-
-            // const history = data[thisGroupKey]["history"];
-            // console.log(history);
-            // let todaysPrompt = false;
-            // for (let key in history) {
-            //     if (history.hasOwnProperty(key) && history[key] == 'date') {
-            //         if (history) {
-
-            //         }
-            //     }
-            // }
-        });
-        // write history data when user submits
-        async function writeHistoryData() {
-            const db2 = getDatabase();
-            const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
-            const newHistoryPostRef = push(historyListRefId);
-            set(newHistoryPostRef, {
-                response: response,
-                member_id: uid,
-                question_id: promptId
-            })
         }
-
-        return (
-            <div>
-                <h1>{groupName}</h1>
-                <h2>{groupId}</h2>
-                <div>
-                    <ul class="list-group container-fluid">
-                        <h2>Today's Prompt</h2>
-                        <p>{date}</p>
-                        <li class="list-group-item">{prompt}</li>
-                        <textarea class="form-control list-group-item" id="exampleFormControlTextarea1" rows="3" value={response} onChange={(e) => setResponse(e.target.value)}></textarea>
-                        <li class="list-group-item reply" onClick={writeHistoryData}>Submit Response</li>
-                    </ul>
-                    <div>
-                        {responseInfo.map(function(res, index){
-                            return <li class="list-group-item" key={ index }>{res}</li>
-                        })}
-                    </div>
-                </div>
-
-            </div>
-        );
+    });
+    // write history data when user submits(WORKS)
+    async function writeHistoryData() {
+        const db2 = getDatabase();
+        const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
+        const newHistoryPostRef = push(historyListRefId);
+        set(newHistoryPostRef, {
+            response: response,
+            member_id: uid,
+            question_id: promptId
+        })
     }
+
+
+    return (
+        <div>
+            <h1>{groupName}</h1>
+            <h2>{groupId}</h2>
+            <div>
+                <ul class="list-group container-fluid">
+                    <h2>Today's Prompt</h2>
+                    <p>{date}</p>
+                    <p>groupname : {JSON.stringify(realGroupName)}</p>
+                    <li class="list-group-item">{prompt}</li>
+                    <textarea class="form-control list-group-item" id="exampleFormControlTextarea1" rows="3" value={response} onChange={(e) => setResponse(e.target.value)}></textarea>
+                    <li class="list-group-item reply" onClick={writeHistoryData}>Submit Response</li>
+                </ul>
+                <div>
+                    {responseInfo.map(function (res, index) {
+                        return <li class="list-group-item" key={index}>{res}</li>
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default Prompt;

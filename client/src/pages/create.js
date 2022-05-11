@@ -40,6 +40,7 @@ const Create = () => {
         set(newMemberRef,{
             member_id: authId
         });
+        navigate('/home')
     }
 
     return (
