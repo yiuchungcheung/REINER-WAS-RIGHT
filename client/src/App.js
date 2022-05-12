@@ -34,7 +34,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/create" element={<Create />} />
               <Route path="/join" element={<Join />} />
-              <Route path="/prompt" element={<Prompt />} />
+              <Route path="/prompt/:id" element={<Prompt />} />
               <Route path="/history" element={<HistoryPrompt />} />
             </Routes>
           </div>

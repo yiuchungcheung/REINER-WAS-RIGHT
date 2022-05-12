@@ -9,7 +9,7 @@ const Prompt = () => {
 
     const db = getDatabase();
     const realGroupName = useParams();
-    console.log(realGroupName)
+    // console.log(realGroupName.id)
     const dbRef = ref(db, 'groups');
 
     const [responseInfo, setResponseInfo] = useState([]);
@@ -46,18 +46,13 @@ const Prompt = () => {
                 var memberValue = (groupSnapshot.child('members').val())
                 var uniqueMemberArr = (Object.values(memberValue))
                 uniqueMemberArr.forEach((memberObj) => {
-                    if (memberObj.member_id == memberId) {
-                        getGroupName = (groupSnapshot.child(' ').val())
+                    if (memberObj.member_id === memberId && realGroupName.id === (groupSnapshot.child('groupname').val())) {
                         getGroupId = (groupSnapshot.child('g_id').val())
                         roomCode = (groupSnapshot.child('g_id').val())
                         getGroupKey = (groupSnapshot.key)
-                        console.log(getGroupName)
-                        console.log(getGroupId)
-                        console.log(getGroupKey)
                     }
                 })
             })
-            setGroupName(getGroupName)
             setGroupId(getGroupId)
             setGroupkey(getGroupKey)
         });
@@ -79,7 +74,7 @@ const Prompt = () => {
                 var historyValues = (groupsnapshot.child('history').val())
                 var uniqueHistoryArr = (Object.values(historyValues))
                 uniqueHistoryArr.forEach((historyObj) => {
-                    if (groupName === (groupsnapshot.child('groupname').val())) {
+                    if (realGroupName.id === (groupsnapshot.child('groupname').val())) {
                         tempPromptArr.push(historyObj.response)
                         console.log(tempPromptArr)
                     }
@@ -130,13 +125,12 @@ const Prompt = () => {
 
     return (
         <div>
-            <h1>{groupName}</h1>
+            <h1>{realGroupName.id}</h1>
             <h2>{groupId}</h2>
             <div>
                 <ul class="list-group container-fluid">
                     <h2>Today's Prompt</h2>
                     <p>{date}</p>
-                    <p>groupname : {JSON.stringify(realGroupName)}</p>
                     <li class="list-group-item">{prompt}</li>
                     <textarea class="form-control list-group-item" id="exampleFormControlTextarea1" rows="3" value={response} onChange={(e) => setResponse(e.target.value)}></textarea>
                     <li class="list-group-item reply" onClick={writeHistoryData}>Submit Response</li>
