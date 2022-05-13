@@ -9,6 +9,7 @@ export { auth } from '../firebase';
 
 const Signup = () => {
     const emailRef = useRef();
+    const nameRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
     const { signup } = useAuth();
@@ -16,9 +17,13 @@ const Signup = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
+    const [name, setName] =useState("");
 
     const handleEmailChange = (event) => {
         setEmail(emailRef.current.value);
+    }
+    const handleNameChange = (event) => {
+        setName(nameRef.current.value);
     }
 
     async function handleSubmit(e) {
@@ -68,7 +73,8 @@ const Signup = () => {
         // writing data: https://firebase.google.com/docs/database/web/read-and-write
         const db = getDatabase();
         set(ref(db, 'users/' + uid), { // get userId from auth = getAuth(); // https://firebase.google.com/docs/auth/web/password-auth#web-version-9_1
-            email: email
+            email: email,
+            name: name
         });
     }
 
@@ -82,6 +88,10 @@ const Signup = () => {
                         <h2 className="text-center mb-4">Sign Up</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
                         <Form onSubmit={handleSubmit}>
+                            <Form.Group id="name">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control type="text" placeholder="name" ref={nameRef} onChange={handleNameChange} required />
+                            </Form.Group>
                             <Form.Group id="email">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" placeholder="email" ref={emailRef} onChange={handleEmailChange} required />

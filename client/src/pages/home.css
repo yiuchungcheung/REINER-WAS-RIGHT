@@ -14,8 +14,10 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: black;
+  color: #343434;
 }
+
+
 
 .list-group-item {
   border: 1.5px solid black;

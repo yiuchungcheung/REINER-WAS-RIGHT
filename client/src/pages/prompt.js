@@ -18,6 +18,9 @@ const Prompt = () => {
     const [response, setResponse] = useState();
     const [promptId, setPromptId] = useState();
     const [groupKey, setGroupkey] = useState();
+    //new
+    const [name, setName] = useState('');
+
     const auth = getAuth();
     const user = auth.currentUser;
     const uid = user.uid
@@ -32,9 +35,11 @@ const Prompt = () => {
     useEffect(() => {
         const db = getDatabase();
         const dbRef = ref(db, 'groups');
+        const nameRef = ref(db, 'users');
         const dbRefQuestions = ref(db, 'questions');
         let getGroupName = '';
         let getGroupId = '';
+        let getName = '';
         let getGroupKey;
         let roomCode;
         let tempArrQuestions = [];
@@ -56,6 +61,19 @@ const Prompt = () => {
             setGroupId(getGroupId)
             setGroupkey(getGroupKey)
         });
+        //gets username
+        onValue(nameRef, (snapshot) => {
+            snapshot.forEach((groupSnapshot)=> {
+                var nameValue = (groupSnapshot.child('names').val())
+                console.log(nameValue)
+
+            })
+        })
+
+
+
+
+
 
         //get question id
         onValue(dbRefQuestions, (snapshot) => {
@@ -125,8 +143,8 @@ const Prompt = () => {
 
     return (
         <div>
-            <h1>{realGroupName.id}</h1>
-            <h2>{groupId}</h2>
+            <h2>Group: {realGroupName.id}</h2>
+            <h2>Room Code: {groupId}</h2>
             <div>
                 <ul class="list-group container-fluid">
                     <h2>Today's Prompt</h2>
