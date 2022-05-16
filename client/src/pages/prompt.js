@@ -103,7 +103,7 @@ const Prompt = () => {
         []);
 
     // will need to change this to random prompts 
-    let prompt = "Would you like to be famous? In what way?";
+    let prompt//  = "Would you like to be famous? In what way?";
     // get questions
     onValue(questionRef, (snapshot) => {
         const data = snapshot.val();
@@ -130,9 +130,11 @@ const Prompt = () => {
             response: response,
             member_id: uid,
             question_id: promptId,
+            question: prompt,
             date: date
         })
-        let textData = document.querySelector('textarea');
+        // clear textarea after submit
+        let textData = document.querySelector('#textarea');
         textData.textContent = "";
     }
 
@@ -144,7 +146,7 @@ const Prompt = () => {
                 const curDay = history[key];
                 for (let data in curDay) { // data = date or question
                     if (data == 'date' && curDay[data] == date) {
-                        // prompt = curDay['question'];
+                        prompt = curDay['question'];
                         console.log(prompt);
                         return true;
                     }
@@ -160,7 +162,19 @@ const Prompt = () => {
         if (todaysQuestionExists(data, groupKey)) {
             console.log('yes');
         } else {
-            console.log('no');
+            const rand = Math.floor(Math.random() * questionList.length);
+            console.log(rand);
+            prompt = questionList[rand];
+
+            const db2 = getDatabase();
+            const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
+            const newHistoryPostRef = push(historyListRefId);
+            set(newHistoryPostRef, {
+            member_id: uid,
+            question_id: promptId,
+            question: prompt,
+            date: date
+        })
         }
     }, {
         onlyOnce: true
@@ -175,7 +189,7 @@ const Prompt = () => {
                     <h2>Today's Prompt</h2>
                     <p>{date}</p>
                     <li class="list-group-item">{prompt}</li>
-                    <textarea class="form-control list-group-item" id="exampleFormControlTextarea1" rows="3" value={response} onChange={(e) => setResponse(e.target.value)}></textarea>
+                    <textarea class="form-control list-group-item" id="textArea" rows="3" value={response} onChange={(e) => setResponse(e.target.value)}></textarea>
                     <li class="list-group-item reply" onClick={writeHistoryData}>Submit Response</li>
                 </ul>
                 <div>
