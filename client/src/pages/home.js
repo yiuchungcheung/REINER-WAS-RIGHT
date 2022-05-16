@@ -94,12 +94,12 @@ const Home = () => {
             <ul class="list-group container-fluid">
 
                 <li class="list-group-item table-title" >Groups for You</li>
-                <li class="list-group-item" onClick={() => { redirectGroup("/create"); }}>+ create a group</li>
-                <li class="list-group-item" onClick={() => { redirectGroup("/join"); }}> 🤝 Join a group</li>
                 {/* <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li> */}
                 {memberInfo.map(function (groupname, index) {
                     return <li class="list-group-item" key={index} onClick={(e) => { redirectGroup("/prompt/" + groupname); }}>{groupname}</li>;
                 })}
+                <li class="list-group-item" onClick={() => { redirectGroup("/create"); }}>+ create a group</li>
+                <li class="list-group-item" onClick={() => { redirectGroup("/join"); }}> 🤝 Join a group</li>
             </ul>
         </div>
     );
