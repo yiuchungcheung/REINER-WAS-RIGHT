@@ -140,14 +140,12 @@ const Prompt = () => {
 
     function todaysQuestionExists(data, groupKey) {
         const history = data[groupKey]["history"];
-        console.log(history);
         for (let key in history) {
             if (history.hasOwnProperty(key)) { // each history entry; one day
                 const curDay = history[key];
                 for (let data in curDay) { // data = date or question
                     if (data == 'date' && curDay[data] == date) {
                         prompt = curDay['question'];
-                        console.log(prompt);
                         return true;
                     }
 
@@ -159,9 +157,7 @@ const Prompt = () => {
 
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
-        if (todaysQuestionExists(data, groupKey)) {
-            console.log('yes');
-        } else {
+        if (!todaysQuestionExists(data, groupKey)) {
             const rand = Math.floor(Math.random() * questionList.length);
             console.log(rand);
             prompt = questionList[rand];
@@ -170,11 +166,11 @@ const Prompt = () => {
             const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
             const newHistoryPostRef = push(historyListRefId);
             set(newHistoryPostRef, {
-            member_id: uid,
-            question_id: promptId,
-            question: prompt,
-            date: date
-        })
+                member_id: uid,
+                question_id: promptId,
+                question: prompt,
+                date: date
+            })
         }
     }, {
         onlyOnce: true
