@@ -12,7 +12,8 @@ const Prompt = () => {
     // console.log(realGroupName.id)
     const dbRef = ref(db, 'groups');
     const questionRef = ref(db, 'questions');
-    const questionList = [];
+    const questionList = []; // question bank
+    const questionMap = {}; // maps question to question id
     let thisGroupKey;
     let roomData;
 
@@ -34,7 +35,16 @@ const Prompt = () => {
     const current = new Date();
     const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
 
+    // map of users to their unique id
+    const usersRef = ref(db, 'users');
+    const userDict = {};
 
+    onValue(usersRef, (snapshot) => {
+        const data = snapshot.val();
+        for (let id in data) {
+            userDict[id] = data[id].name;
+        }
+    });
 
     //grab group name and groupId and display on the webpage
     useEffect(() => {
@@ -77,9 +87,9 @@ const Prompt = () => {
                         var example = (item[0])
                         if (example == uid) {
                             var realNameValue = (item[1].name)
-                            console.log(realNameValue)
-                            console.log(example)
-                            console.log(uid)
+                            // console.log(realNameValue)
+                            // console.log(example)
+                            // console.log(uid)
                             setName(realNameValue)
                         }
                     })
@@ -110,7 +120,7 @@ const Prompt = () => {
                 uniqueHistoryArr.forEach((historyObj) => {
                     if (realGroupName.id === (groupsnapshot.child('groupname').val())) {
                         tempPromptArr.push(historyObj.response)
-                        //console.log(tempPromptArr)
+                        // console.log(tempPromptArr)
                     }
                 });
             });
@@ -121,15 +131,20 @@ const Prompt = () => {
 
     // will need to change this to random prompts 
     let prompt//  = "Would you like to be famous? In what way?";
+    let questionId;
     // get questions
     onValue(questionRef, (snapshot) => {
         const data = snapshot.val();
         for (let key in data) {
             if (data.hasOwnProperty(key)) { // each question object
                 const questionObj = data[key];
+                let qid = undefined;
                 for (let field in questionObj) {
+                    if (field == 'q_id') qid = questionObj[field];
+
                     if (field == 'question') {
                         questionList.push(questionObj[field]);
+                        questionMap[questionObj[field]] = qid;
                     }
                 }
             }
@@ -143,11 +158,9 @@ const Prompt = () => {
         const db2 = getDatabase();
         const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
         const newHistoryPostRef = push(historyListRefId);
-        console.log('RESPONSE: ' + response);
-        console.log('MEMBER ID: ' + uid);
-        console.log('Q ID ' + promptId)
-        console.log('QUESTINO' + prompt)
-        console.log('DATE ' + date)
+        console.log('Q ID ' + promptId + ' ' + questionId)
+        questionId = questionMap[prompt];
+        if (questionId == undefined) questionId = promptId;
         set(newHistoryPostRef, {
             response: response,
             member_id: uid,
@@ -182,6 +195,7 @@ const Prompt = () => {
             const rand = Math.floor(Math.random() * questionList.length);
             console.log(rand);
             prompt = questionList[rand];
+            questionId = questionMap[prompt];
 
             const db2 = getDatabase();
             const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
@@ -189,7 +203,7 @@ const Prompt = () => {
             set(newHistoryPostRef, {
                 response: '',
                 member_id: uid,
-                question_id: promptId,
+                question_id: questionId,
                 question: prompt,
                 date: date
             })
@@ -212,7 +226,8 @@ const Prompt = () => {
                 </ul>
                 <div>
                     {responseInfo.map(function (res, index) {
-                        return <li class="list-group-item" key={index}>{name} : "{res}"</li>
+                        // return <li className="list-group-item" key={index}>{name} : "{res}"</li>
+                        
                     })}
                 </div>
             </div>
