@@ -143,6 +143,11 @@ const Prompt = () => {
         const db2 = getDatabase();
         const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
         const newHistoryPostRef = push(historyListRefId);
+        console.log('RESPONSE: ' + response);
+        console.log('MEMBER ID: ' + uid);
+        console.log('Q ID ' + promptId)
+        console.log('QUESTINO' + prompt)
+        console.log('DATE ' + date)
         set(newHistoryPostRef, {
             response: response,
             member_id: uid,
@@ -151,8 +156,7 @@ const Prompt = () => {
             date: date
         })
         // clear textarea after submit
-        let textData = document.querySelector('#textarea');
-        textData.textContent = "";
+        
     }
 
     function todaysQuestionExists(data, groupKey) {
@@ -183,6 +187,7 @@ const Prompt = () => {
             const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
             const newHistoryPostRef = push(historyListRefId);
             set(newHistoryPostRef, {
+                response: '',
                 member_id: uid,
                 question_id: promptId,
                 question: prompt,

@@ -20,6 +20,12 @@ const Home = () => {
 
         //get this user's name 
         onValue(nameRef, (snapshot) => {
+            const data = snapshot.val();
+            // unique IDs for each user
+            for (let d in data) {
+                console.log(d);
+            }
+            //
             snapshot.forEach((groupSnapshot) => {
                 //var nameValue = (groupSnapshot.child('name').val()) //returns names 
                 var check = (snapshot.val())
@@ -73,12 +79,12 @@ const Home = () => {
     },
         []);
 
-    if (user) {
-        console.log('user successfully logged in')
+    // if (user) {
+    //     console.log('user successfully logged in')
 
-    } else {
-        console.log('no user signed in');
-    }
+    // } else {
+    //     console.log('no user signed in');
+    // }
     function redirectGroup(route) {
         window.location.assign(route);
     }
