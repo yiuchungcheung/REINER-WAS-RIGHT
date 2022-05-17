@@ -126,7 +126,7 @@ const Prompt = () => {
                         const resp = historyObj.response;
                         console.log(m_id)
                         console.log(resp);
-                        if (resp.length != 0) console.log(userDict[m_id] + ' said ' + resp);
+                        responseMap[userDict[m_id]] = resp;
                         tempPromptArr.push(historyObj.response)
                         console.log(tempPromptArr)
                     }
