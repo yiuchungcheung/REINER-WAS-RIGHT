@@ -46,6 +46,9 @@ const Prompt = () => {
         }
     });
 
+    // map each user's unique id to their responses
+    const responseMap = {};
+
     //grab group name and groupId and display on the webpage
     useEffect(() => {
         const db = getDatabase();
@@ -119,8 +122,13 @@ const Prompt = () => {
                 var uniqueHistoryArr = (Object.values(historyValues))
                 uniqueHistoryArr.forEach((historyObj) => {
                     if (realGroupName.id === (groupsnapshot.child('groupname').val())) {
+                        const m_id = historyObj.member_id;
+                        const resp = historyObj.response;
+                        console.log(m_id)
+                        console.log(resp);
+                        if (resp.length != 0) console.log(userDict[m_id] + ' said ' + resp);
                         tempPromptArr.push(historyObj.response)
-                        // console.log(tempPromptArr)
+                        console.log(tempPromptArr)
                     }
                 });
             });
@@ -211,6 +219,8 @@ const Prompt = () => {
     }, {
         onlyOnce: true
     });
+
+    console.log(responseMap);
 
     return (
         <div>
