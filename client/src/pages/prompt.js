@@ -10,6 +10,7 @@ const Prompt = () => {
     const db = getDatabase();
     const realGroupName = useParams();
     // console.log(realGroupName.id)
+    //console.log(realGroupName.secondId)
     const dbRef = ref(db, 'groups');
     const questionRef = ref(db, 'questions');
     const questionList = []; // question bank
@@ -23,9 +24,6 @@ const Prompt = () => {
     const [response, setResponse] = useState();
     const [promptId, setPromptId] = useState();
     const [groupKey, setGroupkey] = useState();
-    //new
-    const [name, setName] = useState('');
-    const [uniqueMemberId, setMemberId] = useState();
 
     const auth = getAuth();
     const user = auth.currentUser;
@@ -48,6 +46,7 @@ const Prompt = () => {
 
     // map each user's unique id to their responses
     const responseMap = {};
+    //console.log(Object.keys(userDict))
 
     //grab group name and groupId and display on the webpage
     useEffect(() => {
@@ -60,7 +59,10 @@ const Prompt = () => {
         let roomCode;
         let tempArrQuestions = [];
         let getPromptId;
-        let realNameValue = '';
+        let histValues;
+        let nameVal;
+        let returnNameVal;
+        let tempMemId;
 
         //gets groupname and groupid
         onValue(dbRef, (snapshot) => {
@@ -78,32 +80,7 @@ const Prompt = () => {
             setGroupId(getGroupId)
             setGroupkey(getGroupKey)
         });
-        //gets username
-        onValue(nameRef, (snapshot) => {
-            snapshot.forEach((groupSnapshot) => {
-                if ((groupSnapshot.child('name').val()) !== null) {
-                    //var nameValue = (groupSnapshot.child('name').val()) //returns names 
-                    var check = (snapshot.val())
-                    var yes = (Object.values(check))
-                    var yesSir = (Object.entries(check))
-                    yesSir.forEach((item) => {
-                        var example = (item[0])
-                        if (example == uid) {
-                            var realNameValue = (item[1].name)
-                            // console.log(realNameValue)
-                            // console.log(example)
-                            // console.log(uid)
-                            setName(realNameValue)
-                        }
-                    })
-                    
-                } else {
-                    console.log("no name")
-                }
-            })
-
-        })
-
+    
         //get question id
         onValue(dbRefQuestions, (snapshot) => {
             snapshot.forEach((groupSnapshot) => {
@@ -114,31 +91,34 @@ const Prompt = () => {
             })
             setPromptId(getPromptId)
         })
-        //get responses from group into an array
+
+        //get responses from group into an array(WORKING ON)
         onValue(dbRef, (snapshot) => {
             let tempPromptArr = [];
             snapshot.forEach((groupsnapshot) => {
                 var historyValues = (groupsnapshot.child('history').val())
                 var uniqueHistoryArr = (Object.values(historyValues))
                 uniqueHistoryArr.forEach((historyObj) => {
-                    if (realGroupName.id === (groupsnapshot.child('groupname').val())) {
-                        const m_id = historyObj.member_id;
-                        const resp = historyObj.response;
-                        console.log(m_id)
-                        console.log(resp);
-                        responseMap[userDict[m_id]] = resp;
+                    if (realGroupName.id === (groupsnapshot.child('groupname').val()) && memberId === (historyObj.member_id)) {
                         tempPromptArr.push(historyObj.response)
-                        console.log(tempPromptArr)
+                        histValues = (historyObj.response);
+                        tempMemId = (memberId)
+                        //nameVal = Object.values(userDict)
+                        //console.log(nameVal)
+                        //console.log(realGroupName.secondId)
+                       
                     }
                 });
             });
             setResponseInfo(tempPromptArr)
+            responseMap[tempMemId] = histValues;
+            console.log(responseMap)
+
         })
     },
         []);
 
-    // will need to change this to random prompts 
-    let prompt//  = "Would you like to be famous? In what way?";
+    let prompt;
     let questionId;
     // get questions
     onValue(questionRef, (snapshot) => {
@@ -160,27 +140,25 @@ const Prompt = () => {
     }, {
         onlyOnce: true
     });
-
     // write history data when user submits(WORKS)
     async function writeHistoryData() {
         const db2 = getDatabase();
         const historyListRefId = ref(db2, 'groups/' + groupKey + '/history');
         const newHistoryPostRef = push(historyListRefId);
-        console.log('Q ID ' + promptId + ' ' + questionId)
+        //console.log('Q ID ' + promptId + ' ' + questionId)
         questionId = questionMap[prompt];
         if (questionId == undefined) questionId = promptId;
         set(newHistoryPostRef, {
             response: response,
             member_id: uid,
-            question_id: promptId,
+            question_id: questionId,
             question: prompt,
             date: date
-        })
-        // clear textarea after submit
-        
+        })        
     }
 
     function todaysQuestionExists(data, groupKey) {
+        //console.log(groupKey)
         const history = data[groupKey]["history"];
         for (let key in history) {
             if (history.hasOwnProperty(key)) { // each history entry; one day
@@ -188,6 +166,7 @@ const Prompt = () => {
                 for (let data in curDay) { // data = date or question
                     if (data == 'date' && curDay[data] == date) {
                         prompt = curDay['question'];
+                        questionId = questionMap[prompt];
                         return true;
                     }
 
@@ -201,7 +180,7 @@ const Prompt = () => {
         const data = snapshot.val();
         if (!todaysQuestionExists(data, groupKey)) {
             const rand = Math.floor(Math.random() * questionList.length);
-            console.log(rand);
+            //console.log(rand);
             prompt = questionList[rand];
             questionId = questionMap[prompt];
 
@@ -220,8 +199,6 @@ const Prompt = () => {
         onlyOnce: true
     });
 
-    console.log(responseMap);
-
     return (
         <div>
             <h2>Group: {realGroupName.id}</h2>
@@ -236,7 +213,7 @@ const Prompt = () => {
                 </ul>
                 <div>
                     {responseInfo.map(function (res, index) {
-                        // return <li className="list-group-item" key={index}>{name} : "{res}"</li>
+                         return <li className="list-group-item" key={index}>{realGroupName.secondId} : "{res}"</li>
                         
                     })}
                 </div>

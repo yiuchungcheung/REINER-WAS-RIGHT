@@ -20,41 +20,20 @@ const Home = () => {
 
         //get this user's name 
         onValue(nameRef, (snapshot) => {
-            const data = snapshot.val();
-            // unique IDs for each user
-            for (let d in data) {
-                console.log(d);
-            }
-            //
             snapshot.forEach((groupSnapshot) => {
-                //var nameValue = (groupSnapshot.child('name').val()) //returns names 
+                var nameValue = (groupSnapshot.child('name').val()) //returns names 
                 var check = (snapshot.val())
                 var yes = (Object.values(check))
-                var yesSir = (Object.entries(check))
-                 var nameArr = (Object.entries(check))
-                 var nameArrLen = nameArr.length;
-                 for(var i = 0; i < nameArrLen; i++) {
-                     if(memberId === nameArr[i]){
-                         console.log("Got it working")
-
-                     }else{
-                         console.log("not working")
-                     }
-                 }
-
-
-
-
-                // var myStringArray = ["Hello", "World"];
-                // var arrayLength = myStringArray.length;
-                // for (var i = 0; i < arrayLength; i++) {
-                //     console.log(myStringArray[i]);
-                //     //Do something
-                // }
-
-
-
+                var another = (Object.entries(yes))
+                //console.log(groupSnapshot.key)
+                if (memberId == (groupSnapshot.key)) {
+                    //console.log(groupSnapshot.child('name').val())
+                    var finalValue = groupSnapshot.child('name').val()
+                    setName(finalValue)
+                    console.log(name)
+                }
             })
+              
         })
 
         onValue(dbRef, (snapshot) => {
@@ -79,12 +58,12 @@ const Home = () => {
     },
         []);
 
-    // if (user) {
-    //     console.log('user successfully logged in')
+    if (user) {
+        console.log('user successfully logged in')
 
-    // } else {
-    //     console.log('no user signed in');
-    // }
+    } else {
+        console.log('no user signed in');
+    }
     function redirectGroup(route) {
         window.location.assign(route);
     }
@@ -102,7 +81,7 @@ const Home = () => {
                 <li class="list-group-item table-title" >Groups for You</li>
                 {/* <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li> */}
                 {memberInfo.map(function (groupname, index) {
-                    return <li class="list-group-item" key={index} onClick={(e) => { redirectGroup("/prompt/" + groupname); }}>{groupname}</li>;
+                    return <li class="list-group-item" key={index} onClick={(e) => { redirectGroup("/prompt/" + groupname + "/" + name); }}>{groupname}</li>;
                 })}
                 <li class="list-group-item" onClick={() => { redirectGroup("/create"); }}>+ create a group</li>
                 <li class="list-group-item" onClick={() => { redirectGroup("/join"); }}> 🤝 Join a group</li>
