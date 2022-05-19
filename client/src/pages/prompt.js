@@ -9,14 +9,10 @@ const Prompt = () => {
 
     const db = getDatabase();
     const realGroupName = useParams();
-    // console.log(realGroupName.id)
-    //console.log(realGroupName.secondId)
     const dbRef = ref(db, 'groups');
     const questionRef = ref(db, 'questions');
-    const questionList = []; // question bank
-    const questionMap = {}; // maps question to question id
-    let thisGroupKey;
-    let roomData;
+    const questionList = [];
+    const questionMap = {};
 
     const [responseInfo, setResponseInfo] = useState([]);
     const [groupName, setGroupName] = useState('');
@@ -33,7 +29,6 @@ const Prompt = () => {
     const current = new Date();
     const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
 
-    // map of users to their unique id
     const usersRef = ref(db, 'users');
     const userDict = {};
 
@@ -44,15 +39,13 @@ const Prompt = () => {
         }
     });
 
-    // map each user's unique id to their responses
-    const responseMap = {};
-    //console.log(Object.keys(userDict))
+    var responseMap = {};
+    var responseMapArry=[];
 
-    //grab group name and groupId and display on the webpage
     useEffect(() => {
         const db = getDatabase();
         const dbRef = ref(db, 'groups');
-        const nameRef = ref(db, 'users');
+        // const nameRef = ref(db, 'users');
         const dbRefQuestions = ref(db, 'questions');
         let getGroupId = '';
         let getGroupKey;
@@ -92,32 +85,36 @@ const Prompt = () => {
             setPromptId(getPromptId)
         })
 
-        //get responses from group into an array(WORKING ON)
+        //get responses from group into an array(CURRENTLY WORKING ON)
         onValue(dbRef, (snapshot) => {
             let tempPromptArr = [];
             snapshot.forEach((groupsnapshot) => {
                 var historyValues = (groupsnapshot.child('history').val())
                 var uniqueHistoryArr = (Object.values(historyValues))
                 uniqueHistoryArr.forEach((historyObj) => {
-                    if (realGroupName.id === (groupsnapshot.child('groupname').val()) && memberId === (historyObj.member_id)) {
-                        tempPromptArr.push(historyObj.response)
+                    if (realGroupName.id === (groupsnapshot.child('groupname').val())) {
                         histValues = (historyObj.response);
-                        tempMemId = (memberId)
-                        //nameVal = Object.values(userDict)
-                        //console.log(nameVal)
-                        //console.log(realGroupName.secondId)
-                       
+                        var realNames = (userDict[historyObj.member_id])
+                        var together = realNames + ' : '+ histValues
+                        tempPromptArr.push(together)
+                        console.groupEnd();
                     }
                 });
             });
             setResponseInfo(tempPromptArr)
             responseMap[tempMemId] = histValues;
             console.log(responseMap)
+            responseMapArry = Object.entries(responseMap)
 
         })
     },
         []);
 
+    const digits = [];
+    for (let n = 0; n < 10000; n++) {
+        digits.push()
+    }
+    // Who is Eren anyway
     let prompt;
     let questionId;
     // get questions
@@ -213,8 +210,7 @@ const Prompt = () => {
                 </ul>
                 <div>
                     {responseInfo.map(function (res, index) {
-                         return <li className="list-group-item" key={index}>{realGroupName.secondId} : "{res}"</li>
-                        
+                         return <li className="list-group-item" id='responses' key={index}>{res}</li>
                     })}
                 </div>
             </div>
