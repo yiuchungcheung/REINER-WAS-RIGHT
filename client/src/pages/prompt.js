@@ -73,7 +73,7 @@ const Prompt = () => {
             setGroupId(getGroupId)
             setGroupkey(getGroupKey)
         });
-    
+
         //get question id
         onValue(dbRefQuestions, (snapshot) => {
             snapshot.forEach((groupSnapshot) => {
@@ -92,7 +92,7 @@ const Prompt = () => {
                 var historyValues = (groupsnapshot.child('history').val())
                 var uniqueHistoryArr = (Object.values(historyValues))
                 uniqueHistoryArr.forEach((historyObj) => {
-                    if (realGroupName.id === (groupsnapshot.child('groupname').val())) {
+                    if (realGroupName.id === (groupsnapshot.child('groupname').val()) && (historyObj.response) != '') {
                         histValues = (historyObj.response);
                         var realNames = (userDict[historyObj.member_id])
                         var together = realNames + ' : '+ histValues
@@ -151,7 +151,7 @@ const Prompt = () => {
             question_id: questionId,
             question: prompt,
             date: date
-        })        
+        })
     }
 
     function todaysQuestionExists(data, groupKey) {

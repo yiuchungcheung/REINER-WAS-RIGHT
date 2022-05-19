@@ -18,10 +18,10 @@ const Home = () => {
         let groupArr = [];
         const nameRef = ref(db, 'users');
 
-        //get this user's name 
+        //get this user's name
         onValue(nameRef, (snapshot) => {
             snapshot.forEach((groupSnapshot) => {
-                var nameValue = (groupSnapshot.child('name').val()) //returns names 
+                var nameValue = (groupSnapshot.child('name').val()) //returns names
                 var check = (snapshot.val())
                 var yes = (Object.values(check))
                 var another = (Object.entries(yes))
@@ -33,7 +33,7 @@ const Home = () => {
                     console.log(name)
                 }
             })
-              
+
         })
 
         onValue(dbRef, (snapshot) => {
@@ -75,16 +75,15 @@ const Home = () => {
                 <p>prompt with your team!</p>
             </div>
 
-
             <ul class="list-group container-fluid">
 
                 <li class="list-group-item table-title" >Groups for You</li>
+                <li class="list-group-item" onClick={() => { redirectGroup("/create"); }}>+ create a group</li>
+                <li class="list-group-item" onClick={() => { redirectGroup("/join"); }}> 🤝 Join a group</li>
                 {/* <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li> */}
                 {memberInfo.map(function (groupname, index) {
                     return <li class="list-group-item" key={index} onClick={(e) => { redirectGroup("/prompt/" + groupname + "/" + name); }}>{groupname}</li>;
                 })}
-                <li class="list-group-item" onClick={() => { redirectGroup("/create"); }}>+ create a group</li>
-                <li class="list-group-item" onClick={() => { redirectGroup("/join"); }}> 🤝 Join a group</li>
             </ul>
         </div>
     );

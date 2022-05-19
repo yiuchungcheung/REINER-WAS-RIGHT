@@ -6,7 +6,7 @@ import { getAuth, signOut } from "firebase/auth";
 
 
 const Nav = () => {
-    
+
     function logout() {
         const auth = getAuth();
 
@@ -18,13 +18,13 @@ const Nav = () => {
             console.log(error.code);
             console.log(error.message);
           });
-          
+
         window.location.replace("https://yejukim.github.io/moment.github.io/");
     }
     return (
 
         <div>
-            
+
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="navbar-brand" href="/home">moment</a>
@@ -34,8 +34,9 @@ const Nav = () => {
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <div id="nav-buttons">
-                        <a href="/create" class="solid btn btn-primary btn-md mr-5"  role="button" aria-disabled="true">Create Group</a>
-                        <a href="/join" class="solid btn btn-secondary btn-md green" role="button" aria-disabled="true">Join Group</a>
+                        <li class="nav-item"><a href="/create" class="solid btn btn-primary btn-md mr-5"  role="button" aria-disabled="true">Create Group</a></li>
+                        <li class="nav-item"><a href="/join" class="solid btn btn-secondary btn-md green" role="button" aria-disabled="true">Join Group</a></li>
+                        <li class="nav-item"><a class="nav-link" onClick={() => {window.location.replace("https://yejukim.github.io/moment.github.io/")}}>Splash Page</a></li>
                         <li class="nav-item"><a class="nav-link" onClick={logout}>Logout</a></li>
                         </div>
                         </ul>
