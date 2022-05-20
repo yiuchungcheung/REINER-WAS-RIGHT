@@ -11,27 +11,16 @@ const Prompt = () => {
     const realGroupName = useParams();
     const dbRef = ref(db, 'groups');
     const questionRef = ref(db, 'questions');
-<<<<<<< HEAD
-=======
     const questionList = [];
     const questionMap = {};
->>>>>>> responsesVictorSession
 
     const [responseInfo, setResponseInfo] = useState([]);
     const [groupName, setGroupName] = useState('');
     const [groupId, setGroupId] = useState('');
-<<<<<<< HEAD
-  
-    // const roomCode = 'pkfkd'; // CHANGE LATER
-    const questionList = [];
-
-    // user info
-=======
     const [response, setResponse] = useState();
     const [promptId, setPromptId] = useState();
     const [groupKey, setGroupkey] = useState();
 
->>>>>>> responsesVictorSession
     const auth = getAuth();
     const user = auth.currentUser;
     const uid = user.uid
@@ -88,10 +77,6 @@ const Prompt = () => {
             setGroupkey(getGroupKey)
         });
 
-<<<<<<< HEAD
-    // will need to change this to random prompts 
-    let prompt;//  = "Would you like to be famous? In what way?";
-=======
         //get question id
         onValue(dbRefQuestions, (snapshot) => {
             snapshot.forEach((groupSnapshot) => {
@@ -102,7 +87,6 @@ const Prompt = () => {
             })
             setPromptId(getPromptId)
         })
->>>>>>> responsesVictorSession
 
         //get responses from group into an array(CURRENTLY WORKING ON)
         onValue(dbRef, (snapshot) => {
@@ -133,43 +117,6 @@ const Prompt = () => {
     for (let n = 0; n < 10000; n++) {
         digits.push()
     }
-<<<<<<< HEAD
-
-    // get questions
-    onValue(questionRef, (snapshot) => {
-        const data = snapshot.val();
-        for (let key in data) {
-            if (data.hasOwnProperty(key)) { // each question object
-                const questionObj = data[key];
-                for (let field in questionObj) {
-                    if (field == 'question') {
-                        questionList.push(questionObj[field]);
-                    }
-                }
-            }
-        }
-    }, {
-        onlyOnce: true
-    });
-
-    function updateRoomData(data) {
-        roomData = data;
-        console.log(roomData);
-    }
-
-    // get current room data
-    onValue(dbRef, (snapshot) => {
-        const data = snapshot.val();
-        let thisGroupKey;
-        // populate set of valid, existing room codes
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                const curGroup = data[key];
-                for (var groupKey in curGroup) {
-                    if (curGroup.hasOwnProperty(groupKey) && groupKey == 'g_id' && curGroup[groupKey] == groupId) { // get current room's data
-                        thisGroupKey = key;
-                        break;
-=======
     // Who is Eren anyway
     let prompt;
     let questionId;
@@ -186,31 +133,10 @@ const Prompt = () => {
                     if (field == 'question') {
                         questionList.push(questionObj[field]);
                         questionMap[questionObj[field]] = qid;
->>>>>>> responsesVictorSession
                     }
                 }
             }
         }
-<<<<<<< HEAD
-
-        if (!todaysQuestionExists(data, thisGroupKey)) {
-            const rand = Math.floor(Math.random() * questionList.length);
-            console.log(rand);
-            prompt = questionList[rand];
-        }
-    }, {
-        onlyOnce: true
-    });
-
-    function updatePrompt (p) {
-        prompt = p;
-        console.log(prompt);
-    }
-
-    function todaysQuestionExists(data, groupKey) {
-        const history = data[groupKey]["history"];
-        console.log(history);
-=======
     }, {
         onlyOnce: true
     });
@@ -234,18 +160,13 @@ const Prompt = () => {
     function todaysQuestionExists(data, groupKey) {
         //console.log(groupKey)
         const history = data[groupKey]["history"];
->>>>>>> responsesVictorSession
         for (let key in history) {
             if (history.hasOwnProperty(key)) { // each history entry; one day
                 const curDay = history[key];
                 for (let data in curDay) { // data = date or question
                     if (data == 'date' && curDay[data] == date) {
                         prompt = curDay['question'];
-<<<<<<< HEAD
-                        console.log(prompt);
-=======
                         questionId = questionMap[prompt];
->>>>>>> responsesVictorSession
                         return true;
                     }
 
@@ -254,8 +175,6 @@ const Prompt = () => {
         }
         return false;
     }
-<<<<<<< HEAD
-=======
 
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
@@ -279,7 +198,6 @@ const Prompt = () => {
     }, {
         onlyOnce: true
     });
->>>>>>> responsesVictorSession
 
     return (
         <div>
