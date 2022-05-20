@@ -211,7 +211,7 @@ const Prompt = () => {
                     <textarea class="form-control list-group-item" id="textArea" rows="3" value={response} onChange={(e) => setResponse(e.target.value)}></textarea>
                     <li class="list-group-item reply" onClick={writeHistoryData}>Submit Response</li>
                 </ul>
-                <div>
+                <div class="list-group container-fluid">
                     {responseInfo.map(function (res, index) {
                          return <li className="list-group-item" id='responses' key={index}>{res}</li>
                     })}
