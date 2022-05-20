@@ -1,9 +1,11 @@
 import { getDatabase, ref, set, push } from 'firebase/database';
 import React, { useRef, useState } from 'react';
+import './home.css'
 import { useNavigate, userNavigate } from 'react-router-dom';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; //https://firebase.google.com/docs/auth/web/manage-users
 const link = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);;
+
 
 const Create = () => {
     const groupRef = useRef();
@@ -23,14 +25,14 @@ const Create = () => {
             if(user) {
                 const uid = user.uid
                 setAuthId(uid)
-                console.log(uid)
+                //console.log(uid)
             }
         })
     }
     async function writeGroupData() {
         const newGroupRef = push(groupsRef);
         const newGroupKey = newGroupRef.key;
-        console.log('group key: ' + newGroupKey);
+        //console.log('group key: ' + newGroupKey);
         set(newGroupRef, {
             g_id: linkName,
             groupname: group
@@ -40,13 +42,14 @@ const Create = () => {
         set(newMemberRef,{
             member_id: authId
         });
+        navigate('/home')
     }
 
     return (
         <div>
             <h3>Create page</h3>
 
-            <Card>
+            <Card className='card'>
                 <Card.Body>
                     <h2 className="text-center mb-4">Room Code: {link}</h2>
                     <Form onSubmit={writeGroupData} >

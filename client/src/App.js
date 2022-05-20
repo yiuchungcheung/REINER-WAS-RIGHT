@@ -7,7 +7,6 @@ import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Prompt from "./pages/prompt";
 import { Container } from 'react-bootstrap';
-import Profile from "./pages/profile";
 import HistoryPrompt from "./pages/history";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
@@ -19,7 +18,7 @@ function App() {
       <Router>
         <div className="App">
           <Nav />
-          <div class="body">
+          <div className="body">
             <Routes>
               <Route exact path="/" element={<Splash />} />
               <Route path="/signup" element={<Container className="d-flex align-items-center justify-content-center"
@@ -35,7 +34,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/create" element={<Create />} />
               <Route path="/join" element={<Join />} />
-              <Route path="/prompt" element={<Prompt />} />
+              <Route path="/prompt/:id/:secondId" element={<Prompt />} />
               <Route path="/history" element={<HistoryPrompt />} />
             </Routes>
           </div>

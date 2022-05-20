@@ -6,15 +6,35 @@ import "./home.css";
 const Home = () => {
 
     const [memberInfo, setMemberInfo] = useState([]);
+    const [name, setName] = useState('');
     const auth = getAuth();
     const user = auth.currentUser;
     const memberId = auth.currentUser.uid
+    const uid = user.uid
 
     useEffect(() => {
         const db = getDatabase();
         const dbRef = ref(db, 'groups');
         let groupArr = [];
-        
+        const nameRef = ref(db, 'users');
+
+        //get this user's name
+        onValue(nameRef, (snapshot) => {
+            snapshot.forEach((groupSnapshot) => {
+                var nameValue = (groupSnapshot.child('name').val()) //returns names
+                var check = (snapshot.val())
+                var yes = (Object.values(check))
+                var another = (Object.entries(yes))
+                //console.log(groupSnapshot.key)
+                if (memberId == (groupSnapshot.key)) {
+                    //console.log(groupSnapshot.child('name').val())
+                    var finalValue = groupSnapshot.child('name').val()
+                    setName(finalValue)
+                    console.log(name)
+                }
+            })
+
+        })
 
         onValue(dbRef, (snapshot) => {
             const data = snapshot.val();
@@ -28,7 +48,7 @@ const Home = () => {
                 var memberValue = (groupSnapshot.child('members').val())
                 var uniqueMemberArr = (Object.values(memberValue))
                 uniqueMemberArr.forEach((memberObj) => {
-                    if(memberObj.member_id == memberId) {
+                    if (memberObj.member_id === memberId) {
                         memberArr.push((groupSnapshot.child('groupname').val()))
                     }
                 })
@@ -56,15 +76,14 @@ const Home = () => {
             </div>
 
             <ul class="list-group container-fluid">
+
                 <li class="list-group-item table-title" >Groups for You</li>
                 <li class="list-group-item" onClick={() => { redirectGroup("/create"); }}>+ create a group</li>
-
-                {/* when groups are created, add ID tag to each created group */}
-                {/* adding ? after /prompt to direct to dediated group prompt interface using the group's ID*/}
-                <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li>
-                {memberInfo.map(function(groupname, index){
-                    return <li class="list-group-item" key={ index } onClick={(e) => { redirectGroup("/prompt?" + groupname); }}>{groupname}</li>;
-                  })}
+                <li class="list-group-item" onClick={() => { redirectGroup("/join"); }}> 🤝 Join a group</li>
+                {/* <li class="list-group-item" id="informatics-capstone" onClick={(e) => { redirectGroup("/prompt?" + e.currentTarget.id); }}>Informatics Capstone</li> */}
+                {memberInfo.map(function (groupname, index) {
+                    return <li class="list-group-item" key={index} onClick={(e) => { redirectGroup("/prompt/" + groupname + "/" + name); }}>{groupname}</li>;
+                })}
             </ul>
         </div>
     );

@@ -7,7 +7,25 @@ header {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: black;
+  color:#343434;
+}
+
+
+#hero {
+  width: 100%;
+  height: calc(50vh - 40px);
+  background: url(../img/bubbles.png) center bottom no-repeat;
+  background-size: 100%;
+  position: relative;
+}
+
+h1 {
+  margin: 0 0 10px 0;
+  font-size: 70px;
+  font-weight: 2;
+  line-height: 56px;
+  font-family: 'Chihaya Jyun', 'Jua', 'Gamja Flower', sans-serif;
+  color: #343434;
 }
 
 .logon {
@@ -24,12 +42,14 @@ header {
   background-color: #FF8B8B;
   color: white;
   border: none;
+  border-radius: 7px;
 }
 
 .outline {
   background-color: transparent;
   border: 2px solid #FF8B8B;
-  color: #FF8B8B
+  color: #FF8B8B;
+  border-radius: 7px;
 }
 
 .btn-primary:hover {

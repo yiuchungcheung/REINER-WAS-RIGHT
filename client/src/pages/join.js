@@ -45,6 +45,9 @@ const Join = () => {
             member_id: user.uid
         })
     }
+    function redirectGroup(route) {
+        window.location.assign(route);
+    }
 
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
@@ -78,7 +81,7 @@ const Join = () => {
                             <Form.Label>Room Code</Form.Label>
                             <Form.Control type="text" placeholder="Room Code" ref={roomRef} required />
                         </Form.Group>
-                        <Button className="w-100 mt-4 outline" type="submit">Join</Button>
+                        <Button className="w-100 mt-4 outline" type="submit" onClick={() => { redirectGroup("/home"); }}>Join</Button>
                     </Form>
                 </Card.Body>
             </Card>

@@ -22,3 +22,9 @@ p {
   color: #45BAA1;
   border: 1.5px solid #45BAA1;
 }
+#responses{
+  padding-left: 10%;
+  padding-right: 10%;
+  border-radius: 5px;
+
+}

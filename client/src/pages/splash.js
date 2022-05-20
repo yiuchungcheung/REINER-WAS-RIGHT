@@ -17,6 +17,7 @@ const Splash = () => {
     return (
         <div>
             <header>
+            <section id="hero"> </section>
             <h1>moment</h1>
             <p>prompt with your team!</p>
             <div class="logon">
